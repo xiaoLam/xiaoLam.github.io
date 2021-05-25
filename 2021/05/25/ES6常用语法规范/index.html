@@ -1,0 +1,365 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ES6常用语法规范 | Lam</title><meta name="keywords" content="ES6 前端小知识"><meta name="author" content="xiaoLam"><meta name="copyright" content="xiaoLam"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="let和var 以后定义变量的时候不要用var了, 尽量使用ES6语法的let var的设计有错误, 但是这种错误不好去修复和移除, 于是就有了新的关键字let let是更完美的var let的完美之处在于拥有块级作用域 var是没有作用域的 变量作用域: 就是指变量在什么范围内是可用的 if和for是没有块级作用域的,造成的问题是, if 和for 大括号中的变量可以被外面访问到， 所以ES5之">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6常用语法规范">
+<meta property="og:url" content="http://example.com/2021/05/25/ES6%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E8%A7%84%E8%8C%83/index.html">
+<meta property="og:site_name" content="Lam">
+<meta property="og:description" content="let和var 以后定义变量的时候不要用var了, 尽量使用ES6语法的let var的设计有错误, 但是这种错误不好去修复和移除, 于是就有了新的关键字let let是更完美的var let的完美之处在于拥有块级作用域 var是没有作用域的 变量作用域: 就是指变量在什么范围内是可用的 if和for是没有块级作用域的,造成的问题是, if 和for 大括号中的变量可以被外面访问到， 所以ES5之">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png">
+<meta property="article:published_time" content="2021-05-25T14:31:56.000Z">
+<meta property="article:modified_time" content="2021-05-25T14:34:11.494Z">
+<meta property="article:author" content="xiaoLam">
+<meta property="article:tag" content="ES6 前端小知识">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png"><link rel="shortcut icon" href="/img/Sun.png"><link rel="canonical" href="http://example.com/2021/05/25/ES6%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E8%A7%84%E8%8C%83/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"top-right"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ES6常用语法规范',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-05-25 22:34:11'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/myCss.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Lam</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ES6常用语法规范</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-25T14:31:56.000Z" title="发表于 2021-05-25 22:31:56">2021-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-05-25T14:34:11.494Z" title="更新于 2021-05-25 22:34:11">2021-05-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ES6-%E5%89%8D%E7%AB%AF%E5%B0%8F%E7%9F%A5%E8%AF%86/">ES6 前端小知识</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="ES6常用语法规范"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="let和var"><a href="#let和var" class="headerlink" title="let和var"></a>let和var</h3><ul>
+<li>以后定义变量的时候不要用var了, 尽量使用ES6语法的let</li>
+<li>var的设计有错误, 但是这种错误不好去修复和移除, 于是就有了新的关键字let</li>
+<li>let是更完美的var</li>
+<li>let的完美之处在于拥有块级作用域</li>
+<li>var是没有作用域的</li>
+<li>变量作用域: 就是指变量在什么范围内是可用的</li>
+<li>if和for是没有块级作用域的,造成的问题是, if 和for 大括号中的变量可以被外面访问到， 所以ES5之前都是借助闭包(function的作用域)来解决外面可以访问内部变量的问题</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 问题</span></span><br><span class="line"><span class="comment">// 需求是点击按钮的时候, 输出该按钮的索引号</span></span><br><span class="line"><span class="comment">// 假如有4个按钮</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; btns.length; i++) &#123;</span><br><span class="line">  btns[i].addEventListener(<span class="string">&quot;click&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 以上代码并不能满足需求, 每次点击按钮的时候输出的都是5</span></span><br><span class="line"><span class="comment">// 因为输出的i因为没有块级作用域,被for中的i++改变了</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>以前解决这种问题使用的是引入第三变量记录每一个btn的索引, 或者使用闭包, 用function的作用域来限制i的访问</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i&lt; btns.length; i++) &#123;</span><br><span class="line">  (<span class="function"><span class="keyword">function</span> (<span class="params">i</span>) </span>&#123; <span class="comment">// 这个i是一个形参</span></span><br><span class="line">    btns[i].addEventListener(<span class="string">&quot;click&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(i)  <span class="comment">// 函数里面的i就有作用域了，不会被外面访问到</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)(i) <span class="comment">// 这个i是每一次传入的实参</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>有了let后，简直爽到！</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i&lt; btns.length; i++) &#123;</span><br><span class="line">  btns[i].addEventListener(<span class="string">&quot;click&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i)  <span class="comment">// 这里的i就不需要借助function的作用域了!</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="const关键字"><a href="#const关键字" class="headerlink" title="const关键字"></a>const关键字</h3><ul>
+<li>const关键字定义的变量不可以再次赋值, 称为常量</li>
+<li>当我们的变量不需要再赋值的时候, 用const来定义可以保证安全性, 而且不需要内存区监听这个变量, 提高效率</li>
+<li>建议在开发中优先使用const定义变量, 在遇到需要重新赋值的标识符才使用let</li>
+<li>const定义的标识符不能重新赋值</li>
+<li>const定义标识符的时候, 必须同时赋值</li>
+<li>常量的定义是指向的对象不能被改变, 而对象内部的属性可以被改变</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 注意点3, 常量的含义是指向的对象不能修改, 但是可以改变对象内部的属性</span></span><br><span class="line">    <span class="keyword">const</span> obj = &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&quot;xiaoLam&quot;</span>,</span><br><span class="line">      <span class="attr">age</span>: <span class="number">22</span>,</span><br><span class="line">      <span class="attr">tall</span>: <span class="number">170</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 内部的属性可以被修改</span></span><br><span class="line">    obj.name = <span class="string">&quot;xiaoLamLam&quot;</span>;</span><br><span class="line">    obj.age = <span class="number">21</span>;</span><br><span class="line">    obj.tall = <span class="number">171</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ES6-对象字面量增强写法"><a href="#ES6-对象字面量增强写法" class="headerlink" title="ES6 对象字面量增强写法"></a>ES6 对象字面量增强写法</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> name = <span class="string">&quot;xiaoLam&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> age = <span class="number">22</span>;</span><br><span class="line"><span class="keyword">const</span> tall = <span class="number">1.70</span>;</span><br><span class="line"><span class="comment">// ES5的写法</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="attr">name</span>: name,</span><br><span class="line">  <span class="attr">age</span>: age,</span><br><span class="line">  <span class="attr">tall</span>: tall,</span><br><span class="line">  <span class="attr">run</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;I can run&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6 属性增强写法</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  name,</span><br><span class="line">  age,</span><br><span class="line">  tall</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6 函数增强写法</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="function"><span class="title">run</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;I can run&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ES6-for…in-循环遍历数组"><a href="#ES6-for…in-循环遍历数组" class="headerlink" title="ES6 for…in 循环遍历数组"></a>ES6 for…in 循环遍历数组</h3><ul>
+<li>for(let index in arr) {}  这里的index拿到的是arr里面数据的下标</li>
+<li>与for(let i =0; i &lt;arr.length; i++) 其实很相似, 就是代码更加简洁了</li>
+</ul>
+<h3 id="ES6-for…of-循环遍历数组"><a href="#ES6-for…of-循环遍历数组" class="headerlink" title="ES6 for…of 循环遍历数组"></a>ES6 for…of 循环遍历数组</h3><ul>
+<li>for(let item of arr) {} 这里的item拿到的式arr中的数据</li>
+</ul>
+<h3 id="编程范式-命令式编程-声明式编程"><a href="#编程范式-命令式编程-声明式编程" class="headerlink" title="编程范式: 命令式编程/声明式编程"></a>编程范式: 命令式编程/声明式编程</h3><h3 id="编程范式-面向对象编程-第一公民-对象-面向函数编程-第一共鸣-函数"><a href="#编程范式-面向对象编程-第一公民-对象-面向函数编程-第一共鸣-函数" class="headerlink" title="编程范式: 面向对象编程(第一公民: 对象) / 面向函数编程(第一共鸣: 函数)"></a>编程范式: 面向对象编程(第一公民: 对象) / 面向函数编程(第一共鸣: 函数)</h3><h3 id="高阶函数-高阶函数的阅读性很强"><a href="#高阶函数-高阶函数的阅读性很强" class="headerlink" title="高阶函数 高阶函数的阅读性很强"></a>高阶函数 高阶函数的阅读性很强</h3><ul>
+<li>filter/map/reduce</li>
+<li>filter<ul>
+<li>filter中传入一个回调函数, 这个回调函数有一个要求, 必须返回一个Boolean值</li>
+<li>当这个boolean值为true时, 函数内部会自动将这个回调的数据添加到一个新的数组中 这个新数组要定义一个数组来接</li>
+<li>当这个boolean值为false时, 函数内部会过滤掉这次的数据</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">10</span>,<span class="number">60</span>,<span class="number">50</span>,<span class="number">445</span>,<span class="number">412</span>,<span class="number">4546</span>,<span class="number">1231</span>,<span class="number">44</span>];</span><br><span class="line"><span class="keyword">let</span> newArr1 = arr.filter(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item &lt; <span class="number">100</span>;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(newArr1);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>map<ul>
+<li>map中也是传入一个回调函数</li>
+<li>对数组中的每一项都运行传入的函数, 返回由每次函数调用的结果构成的数组 也定义一个数组来接</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> newArr2 = newArr1.map(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item * <span class="number">2</span>;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(newArr2);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>reduce方法<ul>
+<li>reduce()中接收两个参数, 第一个参数是会对每一项都会运行的归并函数, 第二个参数是可选的参数,为归并起点的初始值</li>
+<li>归并函数可以接收四个参数, 第一个参数是上一个归并值, 第二个参数是当前项, 第三个参数是当前项的索引值, 第四个参数是数组本身</li>
+<li>函数返回的任何值都会作为下一次调用同一个函数的第一个参数</li>
+<li>如果reduce()中没有传入可选的第二个参数作为归并起点值, 那么第一次迭代将从数组的第二项开始,因此第一次迭代传给归并函数的第一个参数是数组的第一项,第二个参数是数组的第二项, 所以第二个参数通常会传入一个0</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> sum = newArr2.reduce(<span class="function"><span class="keyword">function</span> (<span class="params">preValue, cur</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> preValue + cur;</span><br><span class="line">&#125;,<span class="number">0</span>)</span><br><span class="line"><span class="built_in">console</span>.log(sum);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>以上的高级函数用法可以使用链式编程写法</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> sum2 = arr.filter(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item &lt; <span class="number">100</span>;</span><br><span class="line">&#125;).map(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item * <span class="number">2</span>;</span><br><span class="line">&#125;).reduce(<span class="function"><span class="keyword">function</span> (<span class="params">preValue, cur</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> preValue + cur;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(sum2);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配合箭头函数可以一行代码写完</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> sum3 = arr.filter(<span class="function"><span class="params">item</span> =&gt;</span> item &lt; <span class="number">100</span>).map(<span class="function"><span class="params">item</span> =&gt;</span> item * <span class="number">2</span>).reduce(<span class="function">(<span class="params">preValue,cur</span>) =&gt;</span> preValue + cur,<span class="number">0</span>);</span><br><span class="line"><span class="built_in">console</span>.log(sum3);</span><br></pre></td></tr></table></figure>
+
+<h3 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1. 基本使用</span></span><br><span class="line">  <span class="keyword">const</span> test = <span class="function">(<span class="params">参数列表</span>) =&gt;</span> &#123;函数体&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 参数问题</span></span><br><span class="line"><span class="comment">// 2.1 放入多个参数</span></span><br><span class="line">  <span class="keyword">const</span> test = <span class="function">(<span class="params">num1, num2</span>) =&gt;</span> &#123; <span class="keyword">return</span> num1 + num2 &#125;</span><br><span class="line"><span class="comment">// 2.2 放入一个参数 (可以将小括号省略掉)</span></span><br><span class="line">  <span class="keyword">const</span> test = <span class="function"><span class="params">num</span> =&gt;</span> &#123; <span class="keyword">return</span> num * <span class="number">2</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 函数体中代码数量问题</span></span><br><span class="line"><span class="comment">// 3.1有多行代码</span></span><br><span class="line">  <span class="keyword">const</span> test = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;第一行&quot;</span>)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;第二行代码&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;第三行代码&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">// 3.2 只有一行代码 (花括号和return可以省略)</span></span><br><span class="line">  <span class="keyword">const</span> test = <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;省略花括号&quot;</span>)</span><br><span class="line">  <span class="keyword">const</span> test = <span class="function">(<span class="params">num1, num2</span>) =&gt;</span> num1 + num2;</span><br></pre></td></tr></table></figure>
+
+<h3 id="什么时候使用箭头函数"><a href="#什么时候使用箭头函数" class="headerlink" title="什么时候使用箭头函数"></a>什么时候使用箭头函数</h3><ul>
+<li>在普通的情况下, 使用箭头函数的情况并不多</li>
+<li>在当我们将一个函数作为一个参数传入另外一个函数的情况下, 使用箭头函数</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 例如</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;&#125;,<span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="箭头函数中的this指向问题"><a href="#箭头函数中的this指向问题" class="headerlink" title="箭头函数中的this指向问题"></a>箭头函数中的this指向问题</h3><ul>
+<li>普通函数中的this, 是谁调用指向谁</li>
+<li>箭头函数中的this, 是指向最近一层作用域的this<ul>
+<li>也就是说, 箭头函数中的this, 会想外层作用域中,一层层查找this, 直到找到有this的定义</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="function"><span class="title">test</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 这里是因为setTimeout是由window调用的</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>) <span class="comment">// window</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 因为test中的this是指向obj对象的</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>) <span class="comment">// obj对象</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>) <span class="comment">// obj对象</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="什么是Promise"><a href="#什么是Promise" class="headerlink" title="什么是Promise"></a>什么是Promise</h3><ul>
+<li>Promise是ES6中的一个非常重要和好用的特性</li>
+<li>Promise是做什么的<ul>
+<li>Promise是一个异步编程的解决方案</li>
+</ul>
+</li>
+<li>在什么时候我们会处理异步事件呢?<ul>
+<li>在网络请求中我们会大量处理异步事件</li>
+<li>比如, 我们封装了一个网络请求函数, 向服务器请求数据是不能立即拿到结果的</li>
+<li>所以我们往往会传入另外一个函数, 在数据请求成功的时候, 将数据通过传入的函数回调出去, 简单来说就是在网络请求函数中嵌套另外一个函数</li>
+<li>如果只是一个简单的网络请求, 那么这种方案还是可行的</li>
+</ul>
+</li>
+<li>但是, 当网络请求非常复杂的时候, 就会出现回调地狱</li>
+<li>回调地狱是指: 如果很多的异步操作需要安装顺序来的时候, 就需要回调函数的嵌套, 如果过多的函数嵌套会造成回调地狱, 这样不利于后期代码的维护</li>
+<li>可以使用promise对象来解决这个问题</li>
+</ul>
+<h3 id="Promise的基本语法"><a href="#Promise的基本语法" class="headerlink" title="Promise的基本语法"></a>Promise的基本语法</h3><ul>
+<li>创建一个Promise实例</li>
+<li>在这个实例中传入一个函数, 这个函数包含两个参数, resolve 和 reject</li>
+<li>resolve 和 reject 分贝是两个函数</li>
+<li>resolve函数会在异步操作执行成功后调用, 这个函数中也可以传入参数, 一般是异步操作中获得的数据data</li>
+<li>reject函数会在异步操作执行失败后调用, 这个函数中也是可以传入参数的, 一般是异步操作失败后的错误信息err</li>
+<li>在调用resolve函数后, 后续的then函数会被回调, then中还是传入一个函数, 函数中也是传入一个参数data, 这个data就是resolve中的data数据</li>
+<li>在调用reject函数后, 后续的catch函数会被回调, catch中也是传入一个函数, 函数中也是传入一个参数err, 这个err就是reject中的err错误信息</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    resolve(<span class="string">&quot;你好你好&quot;</span>)</span><br><span class="line">    reject(<span class="string">&quot;错误错误&quot;</span>)</span><br><span class="line">  &#125;, <span class="number">2000</span>)</span><br><span class="line">&#125;)</span><br><span class="line">.then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(data);</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      resolve(<span class="string">&quot;再见再见&quot;</span>)</span><br><span class="line">      reject(<span class="string">&quot;错误错误&quot;</span>)</span><br><span class="line">    &#125;, <span class="number">2000</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line">.then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;)</span><br><span class="line">.catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(err);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 其实可以简单理解为</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 执行异步操作</span></span><br><span class="line">  <span class="comment">// 异步操作成功后调用</span></span><br><span class="line">  resolve(data) <span class="comment">// data为操作成功后传入的数据</span></span><br><span class="line">  <span class="comment">// 异步操作失败后调用</span></span><br><span class="line">  reject(err) <span class="comment">// err为操作失败后传入的错误信息</span></span><br><span class="line">&#125;)</span><br><span class="line">.then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 调用resolve后会进入这个函数中进行下面的操作</span></span><br><span class="line">  <span class="comment">// 这个函数中的data是由resolve中传过来的data</span></span><br><span class="line">&#125;)</span><br><span class="line">.catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 调用reject后会进入这个函数中进行下面的操作</span></span><br><span class="line">  <span class="comment">// 这个函数中的err错误信息是从reject中传过来的err</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="Promise补充知识点"><a href="#Promise补充知识点" class="headerlink" title="Promise补充知识点"></a>Promise补充知识点</h3><ul>
+<li>Promise中的then回调函数其实可以传入两个参数的</li>
+<li>这两个参数都是函数, 第一个函数会在resolve执行后回调, 第二个函数会在reject执行后回调, 这样就省略了catch回调函数</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          resolve(<span class="string">&quot;你好你好&quot;</span>)</span><br><span class="line">          reject(<span class="string">&quot;错误错误&quot;</span>)</span><br><span class="line">        &#125;, <span class="number">1000</span>)</span><br><span class="line">      &#125;)</span><br><span class="line">      .then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123; <span class="comment">// then传入两个函数, 第一个函数会在resolve执行后调用, 第二个含税会在reject执行后调用</span></span><br><span class="line">        <span class="built_in">console</span>.log(data);</span><br><span class="line">      &#125;, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(err);</span><br><span class="line">      &#125;)</span><br><span class="line">    <span class="comment">// 这样写就省略了catch回调函数</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Promise的链式操作"><a href="#Promise的链式操作" class="headerlink" title="Promise的链式操作"></a>Promise的链式操作</h3><ul>
+<li>可以在then回调函数中 return一个new Promise 来进行下一步的异步操作</li>
+<li>如果每次执行成功想要进行下一步异步操作的话, 都要return 一个new Promise, 很麻烦, 所以ES6提供了简写方法和超级简写方法</li>
+<li>如果想要进入catch回调函数的话, 就要使用 return Promise.reject(“错误信息”) 或者 throw “错误信息”</li>
+<li>具体看代码</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    resolve(<span class="string">&quot;你好你好&quot;</span>)</span><br><span class="line">    reject(<span class="string">&quot;错误错误&quot;</span>)</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res + <span class="string">&quot;第一层十行代码&quot;</span>);</span><br><span class="line">  res += <span class="string">&quot;111&quot;</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    resolve(res)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res + <span class="string">&quot;第二层十行代码&quot;</span>);</span><br><span class="line">  res += <span class="string">&quot;222&quot;</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    resolve(res)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res + <span class="string">&quot;第三层十行代码&quot;</span>);</span><br><span class="line">&#125;).catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(err);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在每次进行下一步操作的时候都要return 一个new Promise很麻烦, 所以ES6提供简写模式</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    resolve(<span class="string">&quot;你好你好&quot;</span>)</span><br><span class="line">    reject(<span class="string">&quot;错误错误&quot;</span>)</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res + <span class="string">&quot;第一层十行代码&quot;</span>);</span><br><span class="line">  res += <span class="string">&quot;111&quot;</span></span><br><span class="line">  <span class="comment">// return Promise.resolve(res) // 简写模式</span></span><br><span class="line">  <span class="comment">// 如果是要进入catch回调的话, 就用 return Promise.reject()</span></span><br><span class="line">  <span class="comment">// return Promise.reject(&quot;错误错误&quot;)</span></span><br><span class="line">  <span class="comment">// 或者使用 throw &quot;错误信息&quot;</span></span><br><span class="line">  <span class="keyword">throw</span> <span class="string">&quot;错误错误&quot;</span></span><br><span class="line">&#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res + <span class="string">&quot;第二层十行代码&quot;</span>);</span><br><span class="line">  res += <span class="string">&quot;222&quot;</span></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(res)</span><br><span class="line">&#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res + <span class="string">&quot;第三层十行代码&quot;</span>);</span><br><span class="line">&#125;).catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(err);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行成功后每次都要写Promise.resolve, ES6觉得也很麻烦, 所以还可以更简写</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    resolve(<span class="string">&quot;你好你好&quot;</span>)</span><br><span class="line">    reject(<span class="string">&quot;错误错误&quot;</span>)</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res + <span class="string">&quot;第一层十行代码&quot;</span>);</span><br><span class="line">  res += <span class="string">&quot;111&quot;</span></span><br><span class="line">  <span class="keyword">return</span> res <span class="comment">// 超级简写模式, 只能在then中使用</span></span><br><span class="line">&#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res + <span class="string">&quot;第二层十行代码&quot;</span>);</span><br><span class="line">  res += <span class="string">&quot;222&quot;</span></span><br><span class="line">  <span class="keyword">return</span> res</span><br><span class="line">&#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res + <span class="string">&quot;第三层十行代码&quot;</span>);</span><br><span class="line">&#125;).catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(err);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Promise中的all方法"><a href="#Promise中的all方法" class="headerlink" title="Promise中的all方法"></a>Promise中的all方法</h3><ul>
+<li>如果有一个需求, 需要两个异步请求都完成了, 才能执行</li>
+<li>如果用普通的方法</li>
+</ul>
+<ul>
+<li>定义第三变量, 来记录异步请求是否完成</li>
+<li>定义一个函数, 在进入函数体之前通过第三变量来判断异步请求是否都完成了, 如果都完成了就执行</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> result1 = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">let</span> result2 = <span class="literal">false</span>;</span><br><span class="line">$.ajax(&#123;</span><br><span class="line">  <span class="attr">url</span>: <span class="string">&quot;url1&quot;</span>,</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&quot;get&quot;</span>,</span><br><span class="line">  <span class="function"><span class="title">success</span>(<span class="params">data</span>)</span> &#123;</span><br><span class="line">    result1 = <span class="literal">true</span>;</span><br><span class="line">    resulthandle();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">$.ajax(&#123;</span><br><span class="line">  <span class="attr">url</span>: <span class="string">&quot;url2&quot;</span>,</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&quot;get&quot;</span>,</span><br><span class="line">  <span class="function"><span class="title">success</span>(<span class="params">data</span>)</span> &#123;</span><br><span class="line">    result2 = <span class="literal">true</span>;</span><br><span class="line">    resulthandle();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resulthandle</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (result1 &amp;&amp; result2) &#123;</span><br><span class="line">    <span class="comment">// 执行需求的操作</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果使用Promise.all方法就可以轻松完成需求</li>
+<li>Promise.all() 方法要求传入一个数组, 这个数组包含你想要进行的异步操作</li>
+<li>当数组中的异步操作都完成的时候会调用then回调函数, 这个then中传入一个函数, 函数中又一个参数</li>
+<li>这个函数的参数是一个数组, 数组中包含的是异步操作中返回的data数据</li>
+<li>如果有异步请求失败的话就会进入catch回调函数</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.all([</span><br><span class="line">  <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">      <span class="attr">url</span>: <span class="string">&quot;url1&quot;</span>,</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&quot;get&quot;</span>,</span><br><span class="line">      <span class="function"><span class="title">success</span>(<span class="params">data1</span>)</span> &#123;</span><br><span class="line">        resolve(data1)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;),</span><br><span class="line">  <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">      <span class="attr">url</span>: <span class="string">&quot;url2&quot;</span>,</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&quot;get&quot;</span>,</span><br><span class="line">      <span class="function"><span class="title">success</span>(<span class="params">data2</span>)</span> &#123;</span><br><span class="line">        resolve(data2)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">]).then(<span class="function">(<span class="params">result</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(result); <span class="comment">// 这个result就是一个数组, 数组中是异步操作中返回的数据data</span></span><br><span class="line">&#125;).catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(err); <span class="comment">// 如果有异步操作失败的话, 就会进入catch, err是返回的错误信息</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="for-in-和-for-of的区别"><a href="#for-in-和-for-of的区别" class="headerlink" title="for-in 和 for-of的区别"></a>for-in 和 for-of的区别</h3><ul>
+<li>for-in 遍历的item是 元素的键</li>
+<li>for-of 遍历的item是 元素的值</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">xiaoLam</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/05/25/ES6%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E8%A7%84%E8%8C%83/">http://example.com/2021/05/25/ES6常用语法规范/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Lam</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ES6-%E5%89%8D%E7%AB%AF%E5%B0%8F%E7%9F%A5%E8%AF%86/">ES6 前端小知识</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/05/25/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/"><img class="next-cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">前端模块化</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">xiaoLam</div><div class="author-info__description">记录常见问题, 分享学习笔记</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xiaoLam"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/xiaoLam" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">博客建设中...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#let%E5%92%8Cvar"><span class="toc-number">1.</span> <span class="toc-text">let和var</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#const%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.</span> <span class="toc-text">const关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ES6-%E5%AF%B9%E8%B1%A1%E5%AD%97%E9%9D%A2%E9%87%8F%E5%A2%9E%E5%BC%BA%E5%86%99%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">ES6 对象字面量增强写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ES6-for%E2%80%A6in-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E6%95%B0%E7%BB%84"><span class="toc-number">4.</span> <span class="toc-text">ES6 for…in 循环遍历数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ES6-for%E2%80%A6of-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E6%95%B0%E7%BB%84"><span class="toc-number">5.</span> <span class="toc-text">ES6 for…of 循环遍历数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F-%E5%91%BD%E4%BB%A4%E5%BC%8F%E7%BC%96%E7%A8%8B-%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B"><span class="toc-number">6.</span> <span class="toc-text">编程范式: 命令式编程&#x2F;声明式编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B-%E7%AC%AC%E4%B8%80%E5%85%AC%E6%B0%91-%E5%AF%B9%E8%B1%A1-%E9%9D%A2%E5%90%91%E5%87%BD%E6%95%B0%E7%BC%96%E7%A8%8B-%E7%AC%AC%E4%B8%80%E5%85%B1%E9%B8%A3-%E5%87%BD%E6%95%B0"><span class="toc-number">7.</span> <span class="toc-text">编程范式: 面向对象编程(第一公民: 对象) &#x2F; 面向函数编程(第一共鸣: 函数)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0-%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0%E7%9A%84%E9%98%85%E8%AF%BB%E6%80%A7%E5%BE%88%E5%BC%BA"><span class="toc-number">8.</span> <span class="toc-text">高阶函数 高阶函数的阅读性很强</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0"><span class="toc-number">9.</span> <span class="toc-text">箭头函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BD%BF%E7%94%A8%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0"><span class="toc-number">10.</span> <span class="toc-text">什么时候使用箭头函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84this%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98"><span class="toc-number">11.</span> <span class="toc-text">箭头函数中的this指向问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFPromise"><span class="toc-number">12.</span> <span class="toc-text">什么是Promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-number">13.</span> <span class="toc-text">Promise的基本语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise%E8%A1%A5%E5%85%85%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-number">14.</span> <span class="toc-text">Promise补充知识点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise%E7%9A%84%E9%93%BE%E5%BC%8F%E6%93%8D%E4%BD%9C"><span class="toc-number">15.</span> <span class="toc-text">Promise的链式操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise%E4%B8%AD%E7%9A%84all%E6%96%B9%E6%B3%95"><span class="toc-number">16.</span> <span class="toc-text">Promise中的all方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for-in-%E5%92%8C-for-of%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">17.</span> <span class="toc-text">for-in 和 for-of的区别</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/ES6%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E8%A7%84%E8%8C%83/" title="ES6常用语法规范"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ES6常用语法规范"/></a><div class="content"><a class="title" href="/2021/05/25/ES6%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E8%A7%84%E8%8C%83/" title="ES6常用语法规范">ES6常用语法规范</a><time datetime="2021-05-25T14:31:56.000Z" title="发表于 2021-05-25 22:31:56">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/" title="前端模块化"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前端模块化"/></a><div class="content"><a class="title" href="/2021/05/25/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/" title="前端模块化">前端模块化</a><time datetime="2021-05-25T14:29:49.000Z" title="发表于 2021-05-25 22:29:49">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/webpack%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="webpack项目打包工具详解"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="webpack项目打包工具详解"/></a><div class="content"><a class="title" href="/2021/05/25/webpack%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="webpack项目打包工具详解">webpack项目打包工具详解</a><time datetime="2021-05-25T14:28:27.000Z" title="发表于 2021-05-25 22:28:27">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/15-Vue%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/" title="15-Vue的响应式原理"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="15-Vue的响应式原理"/></a><div class="content"><a class="title" href="/2021/05/25/15-Vue%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/" title="15-Vue的响应式原理">15-Vue的响应式原理</a><time datetime="2021-05-25T14:27:35.000Z" title="发表于 2021-05-25 22:27:35">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/14-Vue%E4%B8%ADaxios%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9D%97%E5%B0%81%E8%A3%85%E6%80%9D%E8%B7%AF/" title="14-Vue中axios网络模块封装思路"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/o1P25LVtMl4TsSF.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="14-Vue中axios网络模块封装思路"/></a><div class="content"><a class="title" href="/2021/05/25/14-Vue%E4%B8%ADaxios%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9D%97%E5%B0%81%E8%A3%85%E6%80%9D%E8%B7%AF/" title="14-Vue中axios网络模块封装思路">14-Vue中axios网络模块封装思路</a><time datetime="2021-05-25T14:26:53.000Z" title="发表于 2021-05-25 22:26:53">2021-05-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By xiaoLam</div><div class="footer_custom_text">愿太阳与你同在</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'fNW4GDkW3MwSmHL2oPfOvzdr-gzGzoHsz',
+      appKey: 'vzTELPATATeJTwB3PNLfNNb3',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="//code.tidio.co/mxoehjwwsedfngoj3ixfix9az25z37vc.js" async="async"></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>

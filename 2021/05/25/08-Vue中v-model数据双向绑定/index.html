@@ -1,0 +1,285 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>08-Vue中v-model数据双向绑定 | Lam</title><meta name="keywords" content="Vue"><meta name="author" content="xiaoLam"><meta name="copyright" content="xiaoLam"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="v-model的基本使用 在input框中添加指令, v-model, 值为需要绑定的data数据 这样的话, 修改input框中的内容, data中的内容也会响应式改变  &lt;div id&#x3D;&quot;app&quot;&gt;  &lt;input type&#x3D;&quot;text&quot; v-model&#x3D;&quot;message&quot;&gt;  &amp;#123;&amp;#123;mess">
+<meta property="og:type" content="article">
+<meta property="og:title" content="08-Vue中v-model数据双向绑定">
+<meta property="og:url" content="http://example.com/2021/05/25/08-Vue%E4%B8%ADv-model%E6%95%B0%E6%8D%AE%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/index.html">
+<meta property="og:site_name" content="Lam">
+<meta property="og:description" content="v-model的基本使用 在input框中添加指令, v-model, 值为需要绑定的data数据 这样的话, 修改input框中的内容, data中的内容也会响应式改变  &lt;div id&#x3D;&quot;app&quot;&gt;  &lt;input type&#x3D;&quot;text&quot; v-model&#x3D;&quot;message&quot;&gt;  &amp;#123;&amp;#123;mess">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/05/19/cWZehC6AKD47tnl.png">
+<meta property="article:published_time" content="2021-05-25T14:21:30.000Z">
+<meta property="article:modified_time" content="2021-05-25T14:21:50.063Z">
+<meta property="article:author" content="xiaoLam">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/19/cWZehC6AKD47tnl.png"><link rel="shortcut icon" href="/img/Sun.png"><link rel="canonical" href="http://example.com/2021/05/25/08-Vue%E4%B8%ADv-model%E6%95%B0%E6%8D%AE%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"top-right"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '08-Vue中v-model数据双向绑定',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-05-25 22:21:50'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/myCss.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2021/05/19/cWZehC6AKD47tnl.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Lam</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">08-Vue中v-model数据双向绑定</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-25T14:21:30.000Z" title="发表于 2021-05-25 22:21:30">2021-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-05-25T14:21:50.063Z" title="更新于 2021-05-25 22:21:50">2021-05-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Vue/">Vue</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="08-Vue中v-model数据双向绑定"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="v-model的基本使用"><a href="#v-model的基本使用" class="headerlink" title="v-model的基本使用"></a>v-model的基本使用</h3><ul>
+<li>在input框中添加指令, v-model, 值为需要绑定的data数据</li>
+<li>这样的话, 修改input框中的内容, data中的内容也会响应式改变</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;message&quot;</span>&gt;</span></span><br><span class="line">  &#123;&#123;message&#125;&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> app = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">    <span class="attr">el</span>: <span class="string">&quot;#app&quot;</span>,</span></span><br><span class="line"><span class="javascript">    <span class="attr">data</span>: &#123;</span></span><br><span class="line"><span class="javascript">      <span class="attr">message</span>: <span class="string">&quot;你好呀&quot;</span></span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">  &#125;)</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="v-model的原理"><a href="#v-model的原理" class="headerlink" title="v-model的原理"></a>v-model的原理</h3><ul>
+<li>v-model其实是一个语法糖, 它的背后本质是包含两个操作<ul>
+<li><ol>
+<li>v-bind绑定一个value属性</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>v-on 指令给当前元素绑定input事件</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;message&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 等同于 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">:value</span>=<span class="string">&quot;message&quot;</span> @<span class="attr">input</span>=<span class="string">&quot;message = $event.target.value&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="v-model结合radio的使用"><a href="#v-model结合radio的使用" class="headerlink" title="v-model结合radio的使用"></a>v-model结合radio的使用</h3><ul>
+<li>在给input的radio设置v-model指令后, 不需要设置相同的name值就可以达到单选的效果</li>
+<li>在使用v-model绑定radio单选按钮到data数据中的时候, 每次点击单选按钮都会将单选按钮是否选择传入data数据中, 已选传入true, 没选则传入false</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;male&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 在给input的radio设置v-model指令后, 不需要设置相同的name值就可以达到单选的效果 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;radio&quot;</span> <span class="attr">id</span>=<span class="string">&quot;male&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;sex&quot;</span> <span class="attr">value</span>=<span class="string">&quot;男&quot;</span>&gt;</span>男</span><br><span class="line">  <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;female&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;radio&quot;</span> <span class="attr">id</span>=<span class="string">&quot;female&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;sex&quot;</span> <span class="attr">value</span>=<span class="string">&quot;女&quot;</span>&gt;</span>女</span><br><span class="line">  <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123;sex&#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> app = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">    <span class="attr">el</span>: <span class="string">&quot;#app&quot;</span>,</span></span><br><span class="line"><span class="javascript">    <span class="attr">data</span>: &#123;</span></span><br><span class="line"><span class="javascript">      <span class="attr">sex</span>: <span class="string">&quot;&quot;</span></span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">  &#125;)</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="v-model结合checkbox使用"><a href="#v-model结合checkbox使用" class="headerlink" title="v-model结合checkbox使用"></a>v-model结合checkbox使用</h3><ul>
+<li>结合单选checkbox使用<ul>
+<li>与单选checkbox结合使用的时候, 一般给绑定的data数据声明为boolean值, 记录单选框是否有被选中</li>
+</ul>
+</li>
+<li>结合多选checkbox使用<ul>
+<li>与多选checkbox结合使用的时候, 一般给绑定的data数据声明为一个数组, 因为每次点击checkbox的时候,如果选中则会将其value值传入data数据, 如果没有选中, 则会将对应的data数据删除, 这样就可以记录用户选择了什么</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;agree&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">id</span>=<span class="string">&quot;agree&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;isAgree&quot;</span>&gt;</span>同意协议</span><br><span class="line">  <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h2</span>&gt;</span>您的选择是: &#123;&#123;isAgree&#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">:disabled</span>=<span class="string">&quot;!isAgree&quot;</span>&gt;</span>下一步<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;hobby&quot;</span> <span class="attr">value</span>=<span class="string">&quot;篮球&quot;</span>&gt;</span>篮球</span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;hobby&quot;</span> <span class="attr">value</span>=<span class="string">&quot;乒乓球&quot;</span>&gt;</span>乒乓球</span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;hobby&quot;</span> <span class="attr">value</span>=<span class="string">&quot;羽毛球&quot;</span>&gt;</span>羽毛球</span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;hobby&quot;</span> <span class="attr">value</span>=<span class="string">&quot;网球&quot;</span>&gt;</span>网球</span><br><span class="line">  <span class="tag">&lt;<span class="name">h2</span>&gt;</span>您的爱好有: &#123;&#123;hobby&#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> app = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">    <span class="attr">el</span>: <span class="string">&quot;#app&quot;</span>,</span></span><br><span class="line"><span class="javascript">    <span class="attr">data</span>: &#123;</span></span><br><span class="line"><span class="javascript">      <span class="attr">isAgree</span>: <span class="literal">false</span>, <span class="comment">//单选框绑定为boolean值</span></span></span><br><span class="line"><span class="javascript">      <span class="attr">hobby</span>: [] <span class="comment">// 多选框绑定为一个数组</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">  &#125;)</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="v-model的值绑定"><a href="#v-model的值绑定" class="headerlink" title="v-model的值绑定"></a>v-model的值绑定</h3><ul>
+<li>实质上就是动态地给value赋值</li>
+<li>在真实开发中, input的值是从服务器中获取或者定义在data中的</li>
+<li>所以要通过v-bind:value动态地给value绑定值</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- v-model的值绑定概念 --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 遍历请求来的数据创建input --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">label</span> <span class="attr">v-for</span>=<span class="string">&quot;item in orginHobby&quot;</span> <span class="attr">:for</span>=<span class="string">&quot;item&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 通过v-model将input绑定在用于记录用户选择的数据中 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">:id</span>=<span class="string">&quot;item&quot;</span> <span class="attr">:value</span>=<span class="string">&quot;item&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;hobby&quot;</span>&gt;</span>&#123;&#123;item&#125;&#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> app = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">    <span class="attr">el</span>: <span class="string">&quot;#app&quot;</span>,</span></span><br><span class="line"><span class="javascript">    <span class="attr">data</span>: &#123;</span></span><br><span class="line"><span class="javascript">      <span class="attr">hobby</span>: [],  <span class="comment">// 这里是用于记录用户选中的数据的</span></span></span><br><span class="line"><span class="javascript">      <span class="attr">orginHobby</span>: [<span class="string">&quot;篮球&quot;</span>, <span class="string">&quot;乒乓球&quot;</span>, <span class="string">&quot;羽毛球&quot;</span>, <span class="string">&quot;网球&quot;</span>, <span class="string">&quot;高尔夫球&quot;</span>, <span class="string">&quot;台球&quot;</span>] <span class="comment">// 这里可以看作是从服务器中请求来的需要渲染在页面上的数据</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">  &#125;)</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="v-model结合select使用"><a href="#v-model结合select使用" class="headerlink" title="v-model结合select使用"></a>v-model结合select使用</h3><ul>
+<li>select单选<ul>
+<li>v-model绑定的是一个值</li>
+<li>当选中option中的一个时, 就会将它的value值传入绑定的data中</li>
+</ul>
+</li>
+<li>select多选<ul>
+<li>用multiple属性将select转换为多选</li>
+<li>v-model绑定的是一个数组</li>
+<li>当选中多个值的时候, 就会将选中的option传入绑定的data数组中</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">select</span> <span class="attr">name</span>=<span class="string">&quot;frult&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;frult&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;苹果&quot;</span>&gt;</span>苹果<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;香蕉&quot;</span>&gt;</span>香蕉<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;榴莲&quot;</span>&gt;</span>榴莲<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;葡萄&quot;</span>&gt;</span>葡萄<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h2</span>&gt;</span>你选择的水果是: &#123;&#123;frult&#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- select设置为多选 用multiple属性 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">select</span> <span class="attr">name</span>=<span class="string">&quot;frults&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;frults&quot;</span> <span class="attr">multiple</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;苹果&quot;</span>&gt;</span>苹果<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;香蕉&quot;</span>&gt;</span>香蕉<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;榴莲&quot;</span>&gt;</span>榴莲<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;葡萄&quot;</span>&gt;</span>葡萄<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h2</span>&gt;</span>你选择的水果有: &#123;&#123;frults&#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> app = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">    <span class="attr">el</span>: <span class="string">&quot;#app&quot;</span>,</span></span><br><span class="line"><span class="javascript">    <span class="attr">data</span>: &#123;</span></span><br><span class="line"><span class="javascript">      <span class="attr">frult</span>: <span class="string">&quot;苹果&quot;</span>, <span class="comment">// 如果是单选的select 就设置为一个字符串就好了</span></span></span><br><span class="line"><span class="javascript">      <span class="attr">frults</span>: [] <span class="comment">// 如果是多选的select 就设置为一个数组</span></span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">  &#125;)</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="v-model的修饰符"><a href="#v-model的修饰符" class="headerlink" title="v-model的修饰符"></a>v-model的修饰符</h3><ul>
+<li><p>lazy修饰符</p>
+<ul>
+<li>默认情况下, v-model默认是在input事件中同步输入框的数据的</li>
+<li>也就是说数据一旦发生变化, data中的数据就会立即变化, 这样会降低性能</li>
+<li>在v-model指令加上lazy修饰符, 就可以让data数据在input框失去焦点或者用户敲下回车的时候才会更新</li>
+</ul>
+</li>
+<li><p>number修饰符</p>
+<ul>
+<li>默认情况下,在输入框中无论用户输入的是字符串还是数字, 存储在data中的时候都会被Vue转换为字符串类型</li>
+<li>如果想要处理的是数字类型, 那么最好将内容存储为数字类型</li>
+<li>number修饰符可以将传入的内容转成数字类型</li>
+</ul>
+</li>
+<li><p>trim修饰符</p>
+<ul>
+<li>如果输入的内容首尾有空格, 我们希望去除的话</li>
+<li>trim修饰符可以过滤内容左右两边的空格</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 1.修饰符: lazy --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-model.lazy</span>=<span class="string">&quot;message&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123;message&#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- 2.修饰符: number --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;number&quot;</span> <span class="attr">v-model.number</span>=<span class="string">&quot;age&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123;age&#125;&#125; &#123;&#123;typeof age&#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- 3.修饰符: trim --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-model.trim</span>=<span class="string">&quot;name&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123;name&#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> app = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">    <span class="attr">el</span>: <span class="string">&quot;#app&quot;</span>,</span></span><br><span class="line"><span class="javascript">    <span class="attr">data</span>: &#123;</span></span><br><span class="line"><span class="javascript">      <span class="attr">message</span>: <span class="string">&quot;&quot;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="attr">age</span>: <span class="number">0</span>,</span></span><br><span class="line"><span class="javascript">      <span class="attr">name</span>: <span class="string">&quot;&quot;</span></span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">  &#125;)</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">xiaoLam</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/05/25/08-Vue%E4%B8%ADv-model%E6%95%B0%E6%8D%AE%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A/">http://example.com/2021/05/25/08-Vue中v-model数据双向绑定/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Lam</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Vue/">Vue</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/05/19/cWZehC6AKD47tnl.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/25/09-Vue%E7%9A%84%E7%BB%84%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91/"><img class="prev-cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">09-Vue的组件化开发</div></div></a></div><div class="next-post pull-right"><a href="/2021/05/25/07-Vue%E4%B8%AD%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86v-for/"><img class="next-cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/o1P25LVtMl4TsSF.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">07-Vue中循环遍历v-for</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/05/12/01-vue学习笔记-vue特点/" title="01-vue学习笔记-vue特点"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-12</div><div class="title">01-vue学习笔记-vue特点</div></div></a></div><div><a href="/2021/05/25/02-VueMustache语法与一些指令/" title="02-VueMustache语法与一些指令"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-25</div><div class="title">02-VueMustache语法与一些指令</div></div></a></div><div><a href="/2021/05/25/03-Vue中v-on事件监听/" title="03-Vue中v-on事件监听"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/cWZehC6AKD47tnl.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-25</div><div class="title">03-Vue中v-on事件监听</div></div></a></div><div><a href="/2021/05/25/04-Vue中computed计算属性/" title="04-Vue中computed计算属性"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/cWZehC6AKD47tnl.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-25</div><div class="title">04-Vue中computed计算属性</div></div></a></div><div><a href="/2021/05/25/06-Vue中响应式数组方法/" title="06-Vue中响应式数组方法"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-25</div><div class="title">06-Vue中响应式数组方法</div></div></a></div><div><a href="/2021/05/25/05-Vue中逻辑语句v-if-v-else-if-v-else/" title="05-Vue中逻辑语句v-if/v-else-if/v-else"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-25</div><div class="title">05-Vue中逻辑语句v-if/v-else-if/v-else</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">xiaoLam</div><div class="author-info__description">记录常见问题, 分享学习笔记</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xiaoLam"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/xiaoLam" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">博客建设中...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#v-model%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">v-model的基本使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-model%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">v-model的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-model%E7%BB%93%E5%90%88radio%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">v-model结合radio的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-model%E7%BB%93%E5%90%88checkbox%E4%BD%BF%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">v-model结合checkbox使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-model%E7%9A%84%E5%80%BC%E7%BB%91%E5%AE%9A"><span class="toc-number">5.</span> <span class="toc-text">v-model的值绑定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-model%E7%BB%93%E5%90%88select%E4%BD%BF%E7%94%A8"><span class="toc-number">6.</span> <span class="toc-text">v-model结合select使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-model%E7%9A%84%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-number">7.</span> <span class="toc-text">v-model的修饰符</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/ES6%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E8%A7%84%E8%8C%83/" title="ES6常用语法规范"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ES6常用语法规范"/></a><div class="content"><a class="title" href="/2021/05/25/ES6%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E8%A7%84%E8%8C%83/" title="ES6常用语法规范">ES6常用语法规范</a><time datetime="2021-05-25T14:31:56.000Z" title="发表于 2021-05-25 22:31:56">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/" title="前端模块化"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前端模块化"/></a><div class="content"><a class="title" href="/2021/05/25/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/" title="前端模块化">前端模块化</a><time datetime="2021-05-25T14:29:49.000Z" title="发表于 2021-05-25 22:29:49">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/webpack%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="webpack项目打包工具详解"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="webpack项目打包工具详解"/></a><div class="content"><a class="title" href="/2021/05/25/webpack%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="webpack项目打包工具详解">webpack项目打包工具详解</a><time datetime="2021-05-25T14:28:27.000Z" title="发表于 2021-05-25 22:28:27">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/15-Vue%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/" title="15-Vue的响应式原理"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="15-Vue的响应式原理"/></a><div class="content"><a class="title" href="/2021/05/25/15-Vue%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/" title="15-Vue的响应式原理">15-Vue的响应式原理</a><time datetime="2021-05-25T14:27:35.000Z" title="发表于 2021-05-25 22:27:35">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/14-Vue%E4%B8%ADaxios%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9D%97%E5%B0%81%E8%A3%85%E6%80%9D%E8%B7%AF/" title="14-Vue中axios网络模块封装思路"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/o1P25LVtMl4TsSF.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="14-Vue中axios网络模块封装思路"/></a><div class="content"><a class="title" href="/2021/05/25/14-Vue%E4%B8%ADaxios%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9D%97%E5%B0%81%E8%A3%85%E6%80%9D%E8%B7%AF/" title="14-Vue中axios网络模块封装思路">14-Vue中axios网络模块封装思路</a><time datetime="2021-05-25T14:26:53.000Z" title="发表于 2021-05-25 22:26:53">2021-05-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By xiaoLam</div><div class="footer_custom_text">愿太阳与你同在</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'fNW4GDkW3MwSmHL2oPfOvzdr-gzGzoHsz',
+      appKey: 'vzTELPATATeJTwB3PNLfNNb3',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="//code.tidio.co/mxoehjwwsedfngoj3ixfix9az25z37vc.js" async="async"></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>

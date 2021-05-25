@@ -1,0 +1,499 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>13-Vue-Vuex全局状态管理详解 | Lam</title><meta name="keywords" content="Vue"><meta name="author" content="xiaoLam"><meta name="copyright" content="xiaoLam"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="什么是vuex 官方解释: Vuex是一个专门为Vue.js 应用程序开发的状态管理模式 采用集中式存储管理应用的所有组件的状态, 并以相应的规则保证状态以一种可以预测的方式发生变化 Vuex 也继承到Vue官方调试工具 devtools extension, 提供了诸如零配置的 time-travel 调试 状态快照导入导出等高级调试功能   官方解释其实有点晦涩难懂 状态管理模式, 集中式存储">
+<meta property="og:type" content="article">
+<meta property="og:title" content="13-Vue-Vuex全局状态管理详解">
+<meta property="og:url" content="http://example.com/2021/05/25/13-Vue-Vuex%E5%85%A8%E5%B1%80%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Lam">
+<meta property="og:description" content="什么是vuex 官方解释: Vuex是一个专门为Vue.js 应用程序开发的状态管理模式 采用集中式存储管理应用的所有组件的状态, 并以相应的规则保证状态以一种可以预测的方式发生变化 Vuex 也继承到Vue官方调试工具 devtools extension, 提供了诸如零配置的 time-travel 调试 状态快照导入导出等高级调试功能   官方解释其实有点晦涩难懂 状态管理模式, 集中式存储">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png">
+<meta property="article:published_time" content="2021-05-25T14:26:02.000Z">
+<meta property="article:modified_time" content="2021-05-25T14:26:21.783Z">
+<meta property="article:author" content="xiaoLam">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png"><link rel="shortcut icon" href="/img/Sun.png"><link rel="canonical" href="http://example.com/2021/05/25/13-Vue-Vuex%E5%85%A8%E5%B1%80%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E8%AF%A6%E8%A7%A3/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"top-right"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '13-Vue-Vuex全局状态管理详解',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-05-25 22:26:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/myCss.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Lam</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">13-Vue-Vuex全局状态管理详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-25T14:26:02.000Z" title="发表于 2021-05-25 22:26:02">2021-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-05-25T14:26:21.783Z" title="更新于 2021-05-25 22:26:21">2021-05-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Vue/">Vue</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="13-Vue-Vuex全局状态管理详解"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="什么是vuex"><a href="#什么是vuex" class="headerlink" title="什么是vuex"></a>什么是vuex</h3><ul>
+<li>官方解释: Vuex是一个专门为Vue.js 应用程序开发的状态管理模式<ul>
+<li>采用集中式存储管理应用的所有组件的状态, 并以相应的规则保证状态以一种可以预测的方式发生变化</li>
+<li>Vuex 也继承到Vue官方调试工具 devtools extension, 提供了诸如零配置的 time-travel 调试 状态快照导入导出等高级调试功能</li>
+</ul>
+</li>
+<li>官方解释其实有点晦涩难懂<ul>
+<li>状态管理模式, 集中式存储管理其实</li>
+<li>就是将需要多个组件共享的变量存储在一个对象中</li>
+<li>然后将这个对象放在顶层的Vue实例中,让其他组件也可以使用</li>
+<li>而且这个对象是响应式的, 这个优点是最牛逼的优点</li>
+</ul>
+</li>
+<li>什么状态需要我们在多个组件间共享呢?<ul>
+<li>用户的登陆状态,用户名称,头像,地理位置信息等等</li>
+<li>商品的收藏,购物车中的物品</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 我们可以尝试一下自己写一下这个共享的对象</span></span><br><span class="line"><span class="comment">// 通过将数据集成在一个共享对象中, 然后将这个对象加入到Vue.prototype 原型对象中, 可以做到将对象中的数据共享出去</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 利用给Vue.prototype Vue的原型对象添加一个对象来达到所有组件都可以访问这个对象</span></span><br><span class="line"><span class="keyword">const</span> shareObj = &#123;</span><br><span class="line">  <span class="attr">name</span> : <span class="string">&quot;xiaoLam&quot;</span>,</span><br><span class="line">  <span class="attr">age</span> : <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line">Vue.prototype.shareObj = shareObj;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 但是有一个问题, 这个共享对象不是响应式的, 所以我说vuex的共享数据是响应式的是最牛逼的优点</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="vuex基本使用"><a href="#vuex基本使用" class="headerlink" title="vuex基本使用"></a>vuex基本使用</h3><ul>
+<li>vuex的安装<ul>
+<li>在项目根目录下命令行输入 npm install vuex –save (运行时依赖安装)</li>
+</ul>
+</li>
+<li>不建议在main.js中使用vuex</li>
+<li>在项目目录下创建一个叫 store的文件夹, 里面创建一个名为 index.js 的文件, 在这个文件中编写vuex的代码</li>
+<li>vuex插件基本使用 在store/index.js文件中<ul>
+<li>引入 vue 和 vuex 因为vuex是依赖vue的</li>
+<li>执行 Vue.use(Vuex) 执行 Vuex中的 install</li>
+<li>创建Vuex实例: 注意,这里创建的是 Vuex.Store实例</li>
+<li>在实例中创建一个 state对象, 在这个对象中写入想要共享的数据</li>
+<li>导出实例</li>
+</ul>
+</li>
+<li>在组件中使用vuex中的共享数据<ul>
+<li>在main.js 中导入上面的实例</li>
+<li>在根组件中注册store , 这样才可以在所有组件中通过 $store 获得store这个对象</li>
+<li>在组件中使用 $store.state 获得这个包含共享数据的对象</li>
+</ul>
+</li>
+<li>修改vuex中的共享数据<ul>
+<li>其实我们可以通过 $store.state 来修改数据</li>
+<li>但是vue官方不建议这样做</li>
+<li>因为 State -&gt; Vue Components -&gt; Actions -&gt; Mutations -&gt; State 是一个单向循环</li>
+<li>官方推荐做法是 我们通过 Vue Components 去修改 Actions 来修改 Mutations 最终达到修改 State 的目的</li>
+<li>因为我们会需要知道是哪一个组件修改了State, 如果直接从 Vue Components 修改State的话就不能追踪是哪个组件修改了State</li>
+<li>Backend API 会监测 Action的改变, Devtools 会监测 Mutations的改变, 按照官方的推荐做法就可以追踪是哪个组件修改了State</li>
+<li>当然也可以跳过Actions, 通过 Vue Components -&gt; Mutations -&gt; State 修改 </li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这里是 store/index.js 文件的代码</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span></span><br><span class="line"><span class="keyword">import</span> Vuex <span class="keyword">from</span> <span class="string">&quot;vuex&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第一步: 引入插件后, 调用Vue.use() 来进行install Vuex</span></span><br><span class="line">Vue.use(Vuex)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二步: 创建Vuex实例: 注意这里创建的是 Vuex中的Store实例</span></span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  <span class="attr">state</span> : &#123;</span><br><span class="line">    <span class="attr">count</span> : <span class="number">100</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第三步: 导出</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> store</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这里是main.js中的代码</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&#x27;./App&#x27;</span></span><br><span class="line"><span class="comment">// 引入store</span></span><br><span class="line"><span class="keyword">import</span> store <span class="keyword">from</span> <span class="string">&quot;./store&quot;</span></span><br><span class="line"></span><br><span class="line">Vue.config.productionTip = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* eslint-disable no-new */</span></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  <span class="attr">el</span>: <span class="string">&#x27;#app&#x27;</span>,</span><br><span class="line">  <span class="comment">// 在根组件中注册 store, 这样就可以在所用组件通过 $store 来获得store这个对象</span></span><br><span class="line">  store,</span><br><span class="line">  <span class="attr">render</span>: <span class="function"><span class="params">h</span> =&gt;</span> h(App)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123; message &#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 用过$store.state 来获得store对象中的state中的共享数据 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123; $store.state.count &#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>------------<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- &lt;hello-vuex :count=&quot;count&quot; /&gt; --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">hello-vuex</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 如果向修改vuex中的共享数据, 可以通过 $store.state修改, 但是官方不建议, 不推荐, 不允许这样修改 --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 后面会讲如何正确地修改vuex中的共享数据 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;$store.state.count++&quot;</span>&gt;</span>+<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;$store.state.count--&quot;</span>&gt;</span>-<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="vue-devtools-和-mutations"><a href="#vue-devtools-和-mutations" class="headerlink" title="vue-devtools 和 mutations"></a>vue-devtools 和 mutations</h3><ul>
+<li>什么是vuex-devtools<ul>
+<li>这是一个vue官方的浏览器插件, 用于调试vue应用</li>
+<li>这个插件可以用于监控mutations操作</li>
+</ul>
+</li>
+<li>什么是mutations操作<ul>
+<li>其实就是使用同步的操作去修改state共享数据</li>
+</ul>
+</li>
+<li>简单来说, 浏览器插件vuex-devtools可以监控mutations操作, 达到追踪是什么组件修改了state共享数据的效果</li>
+</ul>
+<h3 id="vue-devtools-和-mutations-的使用的注意事项"><a href="#vue-devtools-和-mutations-的使用的注意事项" class="headerlink" title="vue-devtools 和 mutations 的使用的注意事项"></a>vue-devtools 和 mutations 的使用的注意事项</h3><ul>
+<li><p>浏览器安装vue-devtools</p>
+<ul>
+<li>chrome应用商店搜索, vue.js devtools 安装即可</li>
+<li>如果进入不了chrome应用商店, 可以离线下载谷歌访问助手</li>
+<li>安装完成后会在浏览器开发者工具中多了一个”vue”选项卡</li>
+</ul>
+</li>
+<li><p>通过mutations来修改state共享数据</p>
+<ul>
+<li>在 store/index.js 中的Vuex.Store实例中创建 mutations对象</li>
+<li>在对象中编写方法</li>
+<li>mutations中的方法默认会有一个名为state的参数, 这个state就是 state共享数据对象</li>
+<li>定义好方法后, 通过提交的方式来调用方法</li>
+<li>具体看以下代码</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这里是store/index.js 中的代码</span></span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  <span class="attr">state</span> : &#123;</span><br><span class="line">    <span class="attr">count</span> : <span class="number">100</span></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 创建mutations 对象</span></span><br><span class="line">  <span class="attr">mutations</span> : &#123;</span><br><span class="line">    <span class="comment">// mutations 中的方法中默认会传入一个state的参数, 这个参数就是上面定义的state对象</span></span><br><span class="line">    <span class="function"><span class="title">increment</span>(<span class="params">state</span>)</span> &#123;</span><br><span class="line">      state.count++</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">decrement</span>(<span class="params">state</span>)</span> &#123;</span><br><span class="line">      state.count--</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这里是组件中定义的methods</span></span><br><span class="line"><span class="attr">methods</span>: &#123;</span><br><span class="line">  <span class="function"><span class="title">addtion</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 这里并不是直接使用 this.$store.mutation.increment() 来执行increment这个方法</span></span><br><span class="line">    <span class="comment">// 而是用 this.$store.commit(&quot;方法名&quot;) 来提交要使用的方法</span></span><br><span class="line">    <span class="built_in">this</span>.$store.commit(<span class="string">&quot;increment&quot;</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">subtraction</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.$store.commit(<span class="string">&quot;decrement&quot;</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<h3 id="以上就是Vuex最简单的使用了"><a href="#以上就是Vuex最简单的使用了" class="headerlink" title="以上就是Vuex最简单的使用了"></a>以上就是Vuex最简单的使用了</h3><ul>
+<li>1.提取出一个公共的store对象，用于保存在多个组件中共享的状态</li>
+<li>2.将store对象放置在new Vue对象中，这样可以保证在所有的组件中都可以使用到</li>
+<li>3.在其他组件中使用store对象中保存的状态即可<ul>
+<li>通过this.$store.state.属性的方式来访问状态</li>
+<li>通过this.$store.commit(‘mutation中方法’)来修改状态</li>
+</ul>
+</li>
+<li>注意事项：<ul>
+<li>我们通过提交mutation的方式，而非直接改变store.state.count。</li>
+<li>这是因为Vuex可以更明确的追踪状态的变化，所以不要直接改变store.state.count的值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Vuex的核心概念"><a href="#Vuex的核心概念" class="headerlink" title="Vuex的核心概念"></a>Vuex的核心概念</h3><ul>
+<li>State, Getters, Mutation, Action, Module</li>
+</ul>
+<h3 id="Vuex概念理解-State单一状态树"><a href="#Vuex概念理解-State单一状态树" class="headerlink" title="Vuex概念理解-State单一状态树"></a>Vuex概念理解-State单一状态树</h3><ul>
+<li>Vuex提出单一状态树, 什么是单一状态树呢?<ul>
+<li>单一状态树英文名称为 Single Source of Truth 也可以翻译成单一数据源</li>
+</ul>
+</li>
+<li>简单来说, 就是将所有的数据都放在同一个Store对象中, 不要因为数据的类型不同, 数据量多而分开放</li>
+<li>如果我们将数据保存在多个Store对象中的话, 那么之后的管理和维护等都会变得特别困难</li>
+<li>所以Vuex推荐使用单一状态树来管理应用层级的全部状态</li>
+<li>单一状态树能够让我们用最直接的方式找到某个状态的片段,而且在以后的维护和调试过程中, 也可以非常方便地管理和维护</li>
+<li>总的来说, 就是不要创建多个Store对象, 只创建一个!!! 所有数据, 所有方法, 都放在这个Store对象中</li>
+</ul>
+<h3 id="Vuex核心概念之-getters"><a href="#Vuex核心概念之-getters" class="headerlink" title="Vuex核心概念之 getters"></a>Vuex核心概念之 getters</h3><ul>
+<li>如果我们需要将state中的共享数据经过处理后再将其渲染在页面中的话, 就需要使用 Vuex中的getters对象</li>
+<li>实质上, getters 相当于Vue中的计算属性 computed</li>
+<li>getters的使用<ul>
+<li>在Vue.store实例中定义getters对象</li>
+<li>在getters对象中定义方法</li>
+<li>在getters对象中的方法都具有两个参数, state 和 getters<ul>
+<li>state参数指向state对象</li>
+<li>getters参数指向getters对象</li>
+</ul>
+</li>
+<li>getters默认是不能传递参数的, 如果希望传递参数, 那么只能让getters本身返回另一个函数.</li>
+<li>在组件中通过 $store.getters 来获得这个getters对象</li>
+</ul>
+</li>
+<li>具体使用方法看下列代码</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这是 store/index.js 的代码</span></span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  <span class="attr">state</span> : &#123;</span><br><span class="line">    <span class="attr">count</span> : <span class="number">100</span>,</span><br><span class="line">    <span class="attr">students</span> : [</span><br><span class="line">      &#123;<span class="attr">id</span>: <span class="number">110</span>, <span class="attr">name</span>: <span class="string">&quot;xiaoLam&quot;</span>, <span class="attr">age</span>:<span class="number">18</span> &#125;,</span><br><span class="line">      &#123;<span class="attr">id</span>: <span class="number">111</span>, <span class="attr">name</span>: <span class="string">&quot;kobe&quot;</span>, <span class="attr">age</span>: <span class="number">20</span>&#125;,</span><br><span class="line">      &#123;<span class="attr">id</span>:<span class="number">112</span>, <span class="attr">name</span>: <span class="string">&quot;suoer&quot;</span>, <span class="attr">age</span>: <span class="number">23</span>&#125;,</span><br><span class="line">      &#123;<span class="attr">id</span>:<span class="number">113</span>, <span class="attr">name</span>: <span class="string">&quot;yangcong&quot;</span>, <span class="attr">age</span>: <span class="number">12</span>&#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">getters</span> : &#123;</span><br><span class="line">    <span class="comment">// 在我们需要将共享数据进行处理后再展示在页面的情况下, 就需要使用getters对象, 相当于计算属性computed</span></span><br><span class="line">    <span class="comment">// getters中的方法也是有一个state参数, 指向state对象</span></span><br><span class="line">    <span class="function"><span class="title">powerCount</span>(<span class="params">state</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> state.count * state.count</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 需求1, 过滤state中的students, 取出年龄大于15的</span></span><br><span class="line">    <span class="function"><span class="title">getAge15</span>(<span class="params">state</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> state.students.filter(<span class="function"><span class="params">students</span> =&gt;</span> students.age &gt; <span class="number">15</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 需求2, 获得年龄大于15的student的个数</span></span><br><span class="line">    <span class="function"><span class="title">getAge15Num</span>(<span class="params">state, getters</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// return state.students.filter(students =&gt; students.age &gt; 15).length</span></span><br><span class="line">      <span class="comment">// getters对象中的方法, 除了state这个参数外, 还有getters参数, 这个参数指向getters对象</span></span><br><span class="line">      <span class="comment">// 所以上面的写法可以写成</span></span><br><span class="line">      <span class="keyword">return</span> getters.getAge15.length</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 需求3, 想要通过用户输入的年龄, 来决定输出大于该年龄的student</span></span><br><span class="line">    <span class="comment">// getters默认是不能传递参数的, 如果希望传递参数, 那么只能让getters本身返回另一个函数.</span></span><br><span class="line">    <span class="comment">// 要达到这个需求的话, 需要在方法中返回一个函数, 具体如下</span></span><br><span class="line">    <span class="comment">// 思路是return出去一个函数, 这个函数有一个形参, 这个形参由用户来决定</span></span><br><span class="line">    <span class="function"><span class="title">getAge</span>(<span class="params">state, getters</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">age</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state.students.filter(<span class="function"><span class="params">students</span> =&gt;</span> students.age &gt; age)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 通过$store.getters 来获取getters中的数据 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123; $store.getters.powerCount &#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123; $store.getters.getAge15 &#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123; $store.getters.getAge15Num &#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 传入参数 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123; $store.getters.getAge(17) &#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Vuex核心概念之-mutations"><a href="#Vuex核心概念之-mutations" class="headerlink" title="Vuex核心概念之 mutations"></a>Vuex核心概念之 mutations</h3><ul>
+<li>Vuex的store状态的更新唯一方式是: 提交 Muattion</li>
+<li>Mutation主要包括两个部分<ul>
+<li>字符串的事件类型(type)</li>
+<li>一个回调函数是(handler), 这个回调函数的第一个参数就是state 指向state对象</li>
+</ul>
+</li>
+<li>mutation的基本使用<ul>
+<li>在 store/index.js 中的Vue.store实例中创建 mutations对象</li>
+<li>这个对象中编写方法</li>
+<li>这个对象中的方法中的第一个参数为 state , 指向state对象</li>
+<li>后面的参数是Vue Components传递过来的额外参数(称为载荷Payload)</li>
+<li>定义好方法后, 在组件中使用 $state.commit(“事件类型”) 提交, 达到更新状态的效果</li>
+<li>具体使用看下列代码</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这些是 store/index.js 中的代码</span></span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  <span class="attr">state</span> : &#123;</span><br><span class="line">    <span class="attr">count</span> : <span class="number">100</span>,</span><br><span class="line">    <span class="attr">students</span> : [</span><br><span class="line">      &#123;<span class="attr">id</span>: <span class="number">110</span>, <span class="attr">name</span>: <span class="string">&quot;xiaoLam&quot;</span>, <span class="attr">age</span>:<span class="number">18</span> &#125;,</span><br><span class="line">      &#123;<span class="attr">id</span>: <span class="number">111</span>, <span class="attr">name</span>: <span class="string">&quot;kobe&quot;</span>, <span class="attr">age</span>: <span class="number">20</span>&#125;,</span><br><span class="line">      &#123;<span class="attr">id</span>:<span class="number">112</span>, <span class="attr">name</span>: <span class="string">&quot;suoer&quot;</span>, <span class="attr">age</span>: <span class="number">23</span>&#125;,</span><br><span class="line">      &#123;<span class="attr">id</span>:<span class="number">113</span>, <span class="attr">name</span>: <span class="string">&quot;yangcong&quot;</span>, <span class="attr">age</span>: <span class="number">12</span>&#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 创建mutations 对象</span></span><br><span class="line">  <span class="attr">mutations</span> : &#123;</span><br><span class="line">    <span class="comment">// mutations 中的方法中默认会传入一个state的参数, 这个参数就是上面定义的state对象</span></span><br><span class="line">    <span class="function"><span class="title">increment</span>(<span class="params">state</span>)</span> &#123;</span><br><span class="line">      state.count++</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">decrement</span>(<span class="params">state</span>)</span> &#123;</span><br><span class="line">      state.count--</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 如果在mutations更新数据的时候, 携带一些参数的时候</span></span><br><span class="line">    <span class="function"><span class="title">incrementCount</span>(<span class="params">state, count</span>)</span> &#123;</span><br><span class="line">      state.count += count</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 如果参数的个数不是一个的时候, 我们可以传入一个对象</span></span><br><span class="line">    <span class="function"><span class="title">addStudent</span>(<span class="params">state,student</span>)</span> &#123;</span><br><span class="line">      state.students.push(student)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 这些是组件中的代码 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 如果向修改vuex中的共享数据, 可以通过 $store.state修改, 但是官方不建议, 不推荐, 不允许这样修改 --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- &lt;button @click=&quot;$store.state.count++&quot;&gt;+&lt;/button&gt; --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- &lt;button @click=&quot;$store.state.count--&quot;&gt;-&lt;/button&gt; --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 官方建议这样来修改vuex中的共享数据 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;addtion&quot;</span>&gt;</span>+<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;subtraction&quot;</span>&gt;</span>-<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;addCount(5)&quot;</span>&gt;</span>+5<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;addCount(10)&quot;</span>&gt;</span>+10<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;addStudent&quot;</span>&gt;</span>添加学生<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="comment">// ..</span></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">  <span class="comment">// ...</span></span></span><br><span class="line"><span class="javascript">  <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="title">addtion</span>(<span class="params"></span>)</span> &#123;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 这里并不是直接使用 this.$store.mutation.increment() 来执行increment这个方法</span></span></span><br><span class="line"><span class="javascript">      <span class="comment">// 而是用 this.$store.commit(&quot;方法名&quot;) 来提交要使用的方法</span></span></span><br><span class="line"><span class="javascript">      <span class="built_in">this</span>.$store.commit(<span class="string">&quot;increment&quot;</span>);</span></span><br><span class="line"><span class="javascript">    &#125;,</span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="title">subtraction</span>(<span class="params"></span>)</span> &#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">this</span>.$store.commit(<span class="string">&quot;decrement&quot;</span>);</span></span><br><span class="line"><span class="javascript">    &#125;,</span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="title">addCount</span>(<span class="params">count</span>)</span> &#123;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 如果带有参数(载荷)， 则在 $store.commit(&quot;事件类型&quot;, 载荷)</span></span></span><br><span class="line"><span class="javascript">      <span class="comment">// this.$store.commit(&quot;incrementCount&quot;, count);</span></span></span><br><span class="line"><span class="javascript">      </span></span><br><span class="line"><span class="javascript">      <span class="comment">// </span></span></span><br><span class="line"><span class="javascript">    &#125;,</span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="title">addStudent</span>(<span class="params"></span>)</span> &#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> student = &#123; <span class="attr">id</span>: <span class="number">115</span>, <span class="attr">name</span>: <span class="string">&quot;wuming&quot;</span>, <span class="attr">age</span>: <span class="number">40</span> &#125;;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 如果参数不止一个, 载荷也可以是一个对象</span></span></span><br><span class="line"><span class="javascript">      <span class="built_in">this</span>.$store.commit(<span class="string">&quot;addStudent&quot;</span>, student);</span></span><br><span class="line"><span class="javascript">    &#125;,</span></span><br><span class="line"><span class="javascript">  &#125;,</span></span><br><span class="line"><span class="javascript">&#125;;</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Mutation提交风格"><a href="#Mutation提交风格" class="headerlink" title="Mutation提交风格"></a>Mutation提交风格</h3><ul>
+<li>上面的通过commit进行提交时一种普通的方式</li>
+<li>Vue还提供了另外一种风格, 它是一个包含type属性的对象</li>
+<li>提交的风格不同, Mutation中的处理方式也会不同<ul>
+<li>普通的提交方式, mutations中的payload就是传入的参数</li>
+<li>包含type属性的对象提交风格, mutations中的payload是整个commit提交的对象</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="comment">// ..</span></span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="function"><span class="title">addCount</span>(<span class="params">count</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 普通的提交风格</span></span><br><span class="line">      <span class="built_in">this</span>.$store.commit(<span class="string">&quot;incrementCount&quot;</span>, count);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 一个包含type属性的对象提交风格</span></span><br><span class="line">      <span class="built_in">this</span>.$store.commit(&#123;</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&quot;incrementCount&quot;</span>, <span class="comment">// type属性, 值为 &quot;事件类型&quot;</span></span><br><span class="line">        count, <span class="comment">// 后面跟的是需要传入的参数</span></span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">mutations : &#123;</span><br><span class="line">  <span class="comment">// 如果在mutations更新数据的时候, 携带一些参数的时候</span></span><br><span class="line">  <span class="function"><span class="title">incrementCount</span>(<span class="params">state, count</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 下文的 payload 指 count形参</span></span><br><span class="line">    <span class="comment">// 普通的提交风格接收参数, 这个 payload 就是传入的参数</span></span><br><span class="line">    <span class="comment">// state.count += count</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 一个包含type属性的对象提交的时候, 这个payload就不是传入的参数了, 而是整个对象</span></span><br><span class="line">    <span class="built_in">console</span>.log(count); <span class="comment">// &#123;type: &quot;incrementCount&quot;, count: 5&#125;</span></span><br><span class="line">    <span class="comment">// 要获得传入的参数, 则是 payload.count</span></span><br><span class="line">    state.count += count.count</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Mutation的响应式规则"><a href="#Mutation的响应式规则" class="headerlink" title="Mutation的响应式规则"></a>Mutation的响应式规则</h3><ul>
+<li>Vuex的store中的state是响应式的, 当state中的数据发生改变的时候, Vue组件也会跟着自动更新</li>
+<li>如果我们想要使用响应式, 那么我们必须遵守一些Vuex的规则<ul>
+<li>拥有响应式的数据必须提前在state中初始化所需的属性</li>
+</ul>
+</li>
+<li>例如: 如果我们给一个对象添加一个新属性的话, 这个操作不是响应式的, 因为这个新属性没有提前在state中初始化</li>
+<li>又例如: 我们给一个对象删除一个属性, 这个操作也不是响应式的</li>
+<li>那么我们如何让这些操作达到响应式的效果呢?<ul>
+<li>这是要是用 Vue.set() 和 Vue.delete() 这两个方法了<ul>
+<li>Vue.set(要修改的数组或对象, Number/String, 修改后的值)</li>
+<li>Vue.delete(要修改的数组或对象, Number/String)</li>
+</ul>
+</li>
+<li>这两个方法Vue中的内部操作就是, 将要修改的属性添加到 Vue中的响应式系统中</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  <span class="attr">state</span> : &#123;</span><br><span class="line">    <span class="attr">info</span> : &#123; <span class="attr">id</span> : <span class="number">102</span>, <span class="attr">name</span> : <span class="string">&quot;fanghuonv&quot;</span>, <span class="attr">age</span> : <span class="number">16</span> &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="attr">mutations</span> : &#123;</span><br><span class="line">    <span class="function"><span class="title">infoUpdate</span>(<span class="params">state</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 如果给state中的对象属性修改值, 这个操作是响应式的, 因为修改的属性提前在state种初始化了</span></span><br><span class="line">      <span class="comment">// state.info.age = 19;</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">// 如果给state中的对象添加新的属性, 这个操作不是响应式的, 因为这个新属性并没有提前在state中初始化</span></span><br><span class="line">      <span class="comment">// state.info[&quot;address&quot;] = &quot;jisichang&quot;</span></span><br><span class="line">      <span class="comment">// 如果要想这个操作也变成响应式的话, 就要使用Vue.set(要修改的数组或对象, Number/String, 修改后的值)</span></span><br><span class="line">      <span class="comment">// Vue.set(state.info, &quot;address&quot;, &quot;jisichang&quot;) </span></span><br><span class="line"></span><br><span class="line">      <span class="comment">// 如果给state中的对象删除属性, 这个操作也不是响应式的</span></span><br><span class="line">      <span class="comment">// delete state.info.id;</span></span><br><span class="line">      <span class="comment">// 如果想要这个操作也变成响应式的话, 就要使用Vue.delete(要修改的数组或对象, Number/String)</span></span><br><span class="line">      Vue.delete(state.info, <span class="string">&quot;id&quot;</span>)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Vue.set() 和 Vue.delete() 这两个方法内部会将 要修改的属性也一起添加到Vue的响应式系统里面了 </span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Mutation常量类型"><a href="#Mutation常量类型" class="headerlink" title="Mutation常量类型"></a>Mutation常量类型</h3><ul>
+<li>在mutation中, 我们定义了很多事件类型(也就是其中的方法名称)</li>
+<li>当我们的项目越来越大的时候, Vuex管理的状态越来越多, 需要更新状态的情况也越来越多, 那么就意味着Mutation中的方法越来越多</li>
+<li>方法过多的时候, 使用者需要花费大量的精力去记住这些方法,甚至是多个文件间切换, 查看方法名称, 甚至如果不是复制方法名称的时候, 还有可能出现写错的情况</li>
+<li>那么如何解决上述的问题呢?<ul>
+<li>一种常见的方案就是使用常量替代Mutation事件类型</li>
+<li>我们可以将这些常量放在一个单独的文件中, 方便管理以及让整个app所有的事件类型都一目了然</li>
+</ul>
+</li>
+<li>具体做法<ul>
+<li>在store文件夹中创建一个名为 mutations-type.js 的文件</li>
+<li>定义mutation方法的时候, 可以使用ES2015中的风格, 使用一个常量来作为函数的名称</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这里是store/mutations-type.js中的代码</span></span><br><span class="line"><span class="comment">// 在这里定义常量 用于 替代Mutation事件类型</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> INCREMENT = <span class="string">&quot;increment&quot;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> DECREMENT =<span class="string">&quot;decrement&quot;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> INCREMENT_COUNT =<span class="string">&quot;incrementCount&quot;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> ADD_STUDENT = <span class="string">&quot;addStudent&quot;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> INFO_UPDATE = <span class="string">&quot;infoUpdate&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 这里是组件中的代码 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="comment">// 引入定义常量名称的文件</span></span></span><br><span class="line"><span class="javascript"><span class="keyword">import</span> &#123;</span></span><br><span class="line"><span class="javascript">  INCREMENT,</span></span><br><span class="line"><span class="javascript">  DECREMENT,</span></span><br><span class="line"><span class="javascript">  INCREMENT_COUNT,</span></span><br><span class="line"><span class="javascript">  ADD_STUDENT,</span></span><br><span class="line"><span class="javascript">  INFO_UPDATE,</span></span><br><span class="line"><span class="javascript">&#125; <span class="keyword">from</span> <span class="string">&quot;./store/mutations-type&quot;</span>;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">  <span class="comment">// ...</span></span></span><br><span class="line"><span class="javascript">  <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="title">addtion</span>(<span class="params"></span>)</span> &#123;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 这里就可以直接使用常量名字代替mutation事件类型了</span></span></span><br><span class="line"><span class="javascript">      <span class="built_in">this</span>.$store.commit(INCREMENT);</span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">  &#125;</span></span><br><span class="line"><span class="javascript">&#125;;</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这里是 store/index.js 中的文件</span></span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  INCREMENT,</span><br><span class="line">  DECREMENT,</span><br><span class="line">  INCREMENT_COUNT,</span><br><span class="line">  ADD_STUDENT,</span><br><span class="line">  INFO_UPDATE,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&quot;./mutations-type&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">mutations</span> : &#123;</span><br><span class="line">    <span class="comment">// 定义mutation方法的时候, 可以使用ES2015中的风格, 使用一个常量来作为函数的名称</span></span><br><span class="line">    [INCREMENT](state) &#123;</span><br><span class="line">      state.count++</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Mutation同步函数"><a href="#Mutation同步函数" class="headerlink" title="Mutation同步函数"></a>Mutation同步函数</h3><ul>
+<li>通常情况下, Vuex要求我们的Mutation中的方法必须都是同步方法<ul>
+<li>原因是, 当我们使用devtools时, devtools可以帮助我们捕捉mutation的快照</li>
+<li>但是如果时异步操作的话, devtools就不能追踪这个异步操作是什么时候被完成</li>
+</ul>
+</li>
+<li>所以, 通常情况下, 不能在mutation种进行异步操作</li>
+</ul>
+<h3 id="Action的基本定义"><a href="#Action的基本定义" class="headerlink" title="Action的基本定义"></a>Action的基本定义</h3><ul>
+<li>如果我们需要在Vuex中进行一些异步操作, 比如网络请求</li>
+<li>这个时候我们就要将异步操作在actions中进行</li>
+<li>Action类似于Mutation, 但是是用来代替Mutation进行异步操作的<ul>
+<li>actions中定义方法与在mutation中定义方法的方式基本一样</li>
+<li>要注意的是, actions中的方法中第一个参数不是state 而是 context<ul>
+<li>context 意为 上下文, 指向store 对象</li>
+</ul>
+</li>
+<li>还有一点, 组件中向actions提交事件类型, 并不是通过 commit, 而是通过 dispatch</li>
+</ul>
+</li>
+<li>actions的基本使用<ul>
+<li>注意: 我们不可以直接在actions中通过异步操作直接更新store的状态</li>
+<li>更新store的状态的唯一方式为 mutations</li>
+<li>所以actions中的方法实质上只是一个中转站, 更新store的状态这个操作最终还是要在mutations中进行</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这是store/index.js中的代码</span></span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">mutations</span> : &#123;</span><br><span class="line">    [INFO_UPDATE](state) &#123;</span><br><span class="line">      <span class="comment">// actions中的方法最终还是要回到mutations中来更新store的状态</span></span><br><span class="line">      state.info.name = <span class="string">&quot;huixinge&quot;</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">actions</span> : &#123;</span><br><span class="line">    <span class="comment">// 在actions中编写方法, 跟在mutations中编写方法差不多, 但是方法中传入的第一个参数并不是state, 而是 context</span></span><br><span class="line">    <span class="comment">// context意为 上下文, 可以理解为store这个对象</span></span><br><span class="line">    <span class="comment">// 如果想要传入参数, 也是跟mutations中的方法一样, 也是有普通方式, 和传入一个包含type属性的对象方式</span></span><br><span class="line">    [A_INFO_UPDATE](context) &#123;</span><br><span class="line">      <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 注意, 不能再actions的方法中更新store的状态, 要记住一点, 更新store状态的唯一方式是mutations中的方法</span></span><br><span class="line">        <span class="comment">// 所以这里做的操作是使用 commit 提交</span></span><br><span class="line">        context.commit(INFO_UPDATE)</span><br><span class="line">      &#125;,<span class="number">1000</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 需求, 需要异步操作完成后, 给组件返回一个信息</span></span><br><span class="line">    <span class="comment">// 第一种方式, 通过组件传参的时候传入一个函数, 在actions中进行异步操作, 异步操作完成后回调这个函数</span></span><br><span class="line">    [A_INFO_UPDATE](context, payload) &#123;</span><br><span class="line">      <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 注意, 不能再actions的方法中更新store的状态, 要记住一点, 更新store状态的唯一方式是mutations中的方法</span></span><br><span class="line">        <span class="comment">// 所以这里做的操作是使用 commit 提交</span></span><br><span class="line">        context.commit(INFO_UPDATE)</span><br><span class="line">        <span class="built_in">console</span>.log(payload.message);</span><br><span class="line">        payload.finsh();</span><br><span class="line">      &#125;,<span class="number">1000</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第一种方式不够优雅, vue官方推荐我们通过 return 一个new Promise 对象来实现</span></span><br><span class="line">    [A_INFO_UPDATE](context, payload) &#123;</span><br><span class="line">      <span class="comment">// 在这里return 出去的是回到组件那里的, 所以组件那里的代码可以用then</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          context.commit(INFO_UPDATE)</span><br><span class="line">          <span class="built_in">console</span>.log(payload.message);</span><br><span class="line">          resolve(<span class="string">&quot;完成了完成了&quot;</span>);</span><br><span class="line">        &#125;,<span class="number">1000</span>)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这是组件中的代码</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="comment">// ..</span></span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="function"><span class="title">aInfoUpdate</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 提交给actions 要用 dispatch 而不是commit</span></span><br><span class="line">      <span class="comment">// commit是提交给mutations的</span></span><br><span class="line">      <span class="built_in">this</span>.$store.dispatch(A_INFO_UPDATE);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 第一种方式: 通过传入一个函数, 在异步操作完成后进行回调</span></span><br><span class="line">      <span class="built_in">this</span>.$store.dispatch(&#123;</span><br><span class="line">        <span class="attr">type</span>: A_INFO_UPDATE,</span><br><span class="line">        <span class="attr">message</span>: <span class="string">&quot;你好你好&quot;</span>,</span><br><span class="line">        <span class="function"><span class="title">finsh</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">          <span class="built_in">console</span>.log(<span class="string">&quot;完成了&quot;</span>);</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 第二种方式: 通过 Promise 对象</span></span><br><span class="line">      <span class="built_in">this</span>.$store</span><br><span class="line">        .dispatch(&#123;</span><br><span class="line">          <span class="attr">type</span>: A_INFO_UPDATE,</span><br><span class="line">          <span class="attr">message</span>: <span class="string">&quot;你好你好&quot;</span>,</span><br><span class="line">        &#125;)</span><br><span class="line">        .then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="built_in">console</span>.log(data);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// actions中return回来的 Promise 是在这里的, 所以这里能用then</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="认识Module"><a href="#认识Module" class="headerlink" title="认识Module"></a>认识Module</h3><ul>
+<li>Module是模块的意思, 为什么在Vuex中我们要使用模块呢?<ul>
+<li>Vue使用单一状态树, 那就意味着很多状态都会交给同一个store管理</li>
+<li>当应用变得非常复杂的时候, store对象就会变得十分臃肿</li>
+<li>为了解决这个问题啊,Vuex允许我们将store分割成模块(Module), 而每个模块都拥有自己的state, mutations, actions, getters</li>
+</ul>
+</li>
+<li>实质就是将共性多的store抽离出去, 这样易于后期维护</li>
+<li>在Module中的 state, mutations, actions, getters 和原来的没有什么区别</li>
+<li>只是有一些需要注意的点<ul>
+<li><ol>
+<li>在组件中想要使用模块中的state共享数据, 通过 $store.state.模块名.数据名 , 来获取</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>对于模块内部的 mutation 和 getter，接收的第一个参数是模块的局部状态对象.</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>在actions中的第一个参数里面 可以通过 context.rootState 来获取根的state</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>在actions中使用 context.commit(“事件类型”) 是提交给模块中的mutations, 而不是根的</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>在getters的方法中, 拥有第三个参数 rootState, 这个参数指向根的state</li>
+</ol>
+</li>
+<li><ol start="6">
+<li>其余大多数使用方法与原本的一致</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> ModuleA = &#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">name</span> : <span class="string">&quot;zhangsan&quot;</span></span><br><span class="line">    <span class="comment">// 在组件中如果要获取这个name, 则是通过 $store.state.ModuleA.name 来获取</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">getters</span> : &#123;</span><br><span class="line">    <span class="function"><span class="title">fullName</span>(<span class="params">state</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> state.name + <span class="number">111</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">fullName2</span>(<span class="params">state, getters</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> getters.fullName + <span class="number">222</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 除了基本的写法外, 模块中的getters中的函数还有第三个参数, 为 rootState, 指向根的state</span></span><br><span class="line">    <span class="function"><span class="title">fullName3</span>(<span class="params">state,getters,rootState</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> getters.fullName2 + rootState.count</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">mutations</span> : &#123;</span><br><span class="line">    <span class="function"><span class="title">nameUpdate</span>(<span class="params">state, payload</span>)</span> &#123;</span><br><span class="line">      state.name = payload</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">actions</span> : &#123;</span><br><span class="line">    <span class="comment">// context 意为上下文 所以这里指向这个模块</span></span><br><span class="line">    <span class="function"><span class="title">AnameUpdate</span>(<span class="params">context,payload</span>)</span> &#123;</span><br><span class="line">      <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// console.log(context);</span></span><br><span class="line">        context.commit(<span class="string">&quot;nameUpdate&quot;</span>, payload)</span><br><span class="line">      &#125;,<span class="number">1000</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  <span class="attr">state</span> : &#123;</span><br><span class="line">    <span class="attr">count</span> : <span class="number">100</span>,</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="attr">modules</span> : &#123;</span><br><span class="line">    ModuleA</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h3><ul>
+<li>当我们Vuex帮助我们管理过多内容的时候, 会发现index.js文件变得很乱, 我们要将index.js文件解构, 让我们的代码更加清晰</li>
+<li>以下操作都在store文件夹中进行<ul>
+<li>创建getters.js文件, 将index.js中的getters对象抽取到这个文件中</li>
+<li>创建mutations.js文件, 将index.js中的mutations对象抽取到这个文件中</li>
+<li>创建actions.js文件, 将index.js中的actions对象抽取到这个文件中</li>
+<li>创建modules文件夹, 里面创建ModuleA.js文件, 将ModuleA模块抽取到这个文件中</li>
+</ul>
+</li>
+<li>这样我们的代码就变得很清晰了, 方便后期的维护和更新</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">xiaoLam</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/05/25/13-Vue-Vuex%E5%85%A8%E5%B1%80%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E8%AF%A6%E8%A7%A3/">http://example.com/2021/05/25/13-Vue-Vuex全局状态管理详解/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Lam</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Vue/">Vue</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/25/14-Vue%E4%B8%ADaxios%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9D%97%E5%B0%81%E8%A3%85%E6%80%9D%E8%B7%AF/"><img class="prev-cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/o1P25LVtMl4TsSF.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">14-Vue中axios网络模块封装思路</div></div></a></div><div class="next-post pull-right"><a href="/2021/05/25/12-Vue-Router%E8%B7%AF%E7%94%B1%E8%AF%A6%E8%A7%A3/"><img class="next-cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">12-Vue-Router路由详解</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/05/12/01-vue学习笔记-vue特点/" title="01-vue学习笔记-vue特点"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-12</div><div class="title">01-vue学习笔记-vue特点</div></div></a></div><div><a href="/2021/05/25/02-VueMustache语法与一些指令/" title="02-VueMustache语法与一些指令"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-25</div><div class="title">02-VueMustache语法与一些指令</div></div></a></div><div><a href="/2021/05/25/03-Vue中v-on事件监听/" title="03-Vue中v-on事件监听"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/cWZehC6AKD47tnl.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-25</div><div class="title">03-Vue中v-on事件监听</div></div></a></div><div><a href="/2021/05/25/04-Vue中computed计算属性/" title="04-Vue中computed计算属性"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/cWZehC6AKD47tnl.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-25</div><div class="title">04-Vue中computed计算属性</div></div></a></div><div><a href="/2021/05/25/06-Vue中响应式数组方法/" title="06-Vue中响应式数组方法"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-25</div><div class="title">06-Vue中响应式数组方法</div></div></a></div><div><a href="/2021/05/25/05-Vue中逻辑语句v-if-v-else-if-v-else/" title="05-Vue中逻辑语句v-if/v-else-if/v-else"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-25</div><div class="title">05-Vue中逻辑语句v-if/v-else-if/v-else</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">xiaoLam</div><div class="author-info__description">记录常见问题, 分享学习笔记</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xiaoLam"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/xiaoLam" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">博客建设中...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFvuex"><span class="toc-number">1.</span> <span class="toc-text">什么是vuex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vuex%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">vuex基本使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue-devtools-%E5%92%8C-mutations"><span class="toc-number">3.</span> <span class="toc-text">vue-devtools 和 mutations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue-devtools-%E5%92%8C-mutations-%E7%9A%84%E4%BD%BF%E7%94%A8%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">vue-devtools 和 mutations 的使用的注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8A%E5%B0%B1%E6%98%AFVuex%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BA%86"><span class="toc-number">5.</span> <span class="toc-text">以上就是Vuex最简单的使用了</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vuex%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">6.</span> <span class="toc-text">Vuex的核心概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vuex%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3-State%E5%8D%95%E4%B8%80%E7%8A%B6%E6%80%81%E6%A0%91"><span class="toc-number">7.</span> <span class="toc-text">Vuex概念理解-State单一状态树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vuex%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B9%8B-getters"><span class="toc-number">8.</span> <span class="toc-text">Vuex核心概念之 getters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vuex%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B9%8B-mutations"><span class="toc-number">9.</span> <span class="toc-text">Vuex核心概念之 mutations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutation%E6%8F%90%E4%BA%A4%E9%A3%8E%E6%A0%BC"><span class="toc-number">10.</span> <span class="toc-text">Mutation提交风格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutation%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E8%A7%84%E5%88%99"><span class="toc-number">11.</span> <span class="toc-text">Mutation的响应式规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutation%E5%B8%B8%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="toc-number">12.</span> <span class="toc-text">Mutation常量类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutation%E5%90%8C%E6%AD%A5%E5%87%BD%E6%95%B0"><span class="toc-number">13.</span> <span class="toc-text">Mutation同步函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Action%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89"><span class="toc-number">14.</span> <span class="toc-text">Action的基本定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86Module"><span class="toc-number">15.</span> <span class="toc-text">认识Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="toc-number">16.</span> <span class="toc-text">项目结构</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/ES6%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E8%A7%84%E8%8C%83/" title="ES6常用语法规范"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ES6常用语法规范"/></a><div class="content"><a class="title" href="/2021/05/25/ES6%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E8%A7%84%E8%8C%83/" title="ES6常用语法规范">ES6常用语法规范</a><time datetime="2021-05-25T14:31:56.000Z" title="发表于 2021-05-25 22:31:56">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/" title="前端模块化"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前端模块化"/></a><div class="content"><a class="title" href="/2021/05/25/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/" title="前端模块化">前端模块化</a><time datetime="2021-05-25T14:29:49.000Z" title="发表于 2021-05-25 22:29:49">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/webpack%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="webpack项目打包工具详解"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="webpack项目打包工具详解"/></a><div class="content"><a class="title" href="/2021/05/25/webpack%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="webpack项目打包工具详解">webpack项目打包工具详解</a><time datetime="2021-05-25T14:28:27.000Z" title="发表于 2021-05-25 22:28:27">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/15-Vue%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/" title="15-Vue的响应式原理"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="15-Vue的响应式原理"/></a><div class="content"><a class="title" href="/2021/05/25/15-Vue%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/" title="15-Vue的响应式原理">15-Vue的响应式原理</a><time datetime="2021-05-25T14:27:35.000Z" title="发表于 2021-05-25 22:27:35">2021-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/25/14-Vue%E4%B8%ADaxios%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9D%97%E5%B0%81%E8%A3%85%E6%80%9D%E8%B7%AF/" title="14-Vue中axios网络模块封装思路"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/o1P25LVtMl4TsSF.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="14-Vue中axios网络模块封装思路"/></a><div class="content"><a class="title" href="/2021/05/25/14-Vue%E4%B8%ADaxios%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9D%97%E5%B0%81%E8%A3%85%E6%80%9D%E8%B7%AF/" title="14-Vue中axios网络模块封装思路">14-Vue中axios网络模块封装思路</a><time datetime="2021-05-25T14:26:53.000Z" title="发表于 2021-05-25 22:26:53">2021-05-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By xiaoLam</div><div class="footer_custom_text">愿太阳与你同在</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'fNW4GDkW3MwSmHL2oPfOvzdr-gzGzoHsz',
+      appKey: 'vzTELPATATeJTwB3PNLfNNb3',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="//code.tidio.co/mxoehjwwsedfngoj3ixfix9az25z37vc.js" async="async"></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>
