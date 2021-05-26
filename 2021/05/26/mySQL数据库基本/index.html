@@ -1,0 +1,603 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>mySQL数据库基本 | Lam</title><meta name="keywords" content="mySQL"><meta name="author" content="xiaoLam"><meta name="copyright" content="xiaoLam"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="为什么需要数据库 任何软件系统都需要存放大量的数据, 这些数据通常都是非常复杂和庞大的 比如用户信息包括姓名、年龄、性别、地址 比如商品信息包括商品名称、描述、价格、分类标签、商品图片等 比如歌曲信息包括歌曲名称、歌手、专辑、歌曲时长、歌词、封面等   这些信息如果直接存储到文件系统中可以吗？可以，但是文件系统有很多缺点 很难以合适的方式组织数据(多张表之前的关系合理组织) 并且对数据进行增删改查">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mySQL数据库基本">
+<meta property="og:url" content="http://example.com/2021/05/26/mySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC/index.html">
+<meta property="og:site_name" content="Lam">
+<meta property="og:description" content="为什么需要数据库 任何软件系统都需要存放大量的数据, 这些数据通常都是非常复杂和庞大的 比如用户信息包括姓名、年龄、性别、地址 比如商品信息包括商品名称、描述、价格、分类标签、商品图片等 比如歌曲信息包括歌曲名称、歌手、专辑、歌曲时长、歌词、封面等   这些信息如果直接存储到文件系统中可以吗？可以，但是文件系统有很多缺点 很难以合适的方式组织数据(多张表之前的关系合理组织) 并且对数据进行增删改查">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png">
+<meta property="article:published_time" content="2021-05-26T13:29:01.000Z">
+<meta property="article:modified_time" content="2021-05-26T13:30:20.926Z">
+<meta property="article:author" content="xiaoLam">
+<meta property="article:tag" content="mySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png"><link rel="shortcut icon" href="/img/Sun.png"><link rel="canonical" href="http://example.com/2021/05/26/mySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"top-right"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'mySQL数据库基本',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-05-26 21:30:20'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/myCss.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Lam</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">mySQL数据库基本</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-26T13:29:01.000Z" title="发表于 2021-05-26 21:29:01">2021-05-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-05-26T13:30:20.926Z" title="更新于 2021-05-26 21:30:20">2021-05-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/mySQL/">mySQL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="mySQL数据库基本"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="为什么需要数据库"><a href="#为什么需要数据库" class="headerlink" title="为什么需要数据库"></a>为什么需要数据库</h3><ul>
+<li>任何软件系统都需要存放大量的数据, 这些数据通常都是非常复杂和庞大的<ul>
+<li>比如用户信息包括姓名、年龄、性别、地址</li>
+<li>比如商品信息包括商品名称、描述、价格、分类标签、商品图片等</li>
+<li>比如歌曲信息包括歌曲名称、歌手、专辑、歌曲时长、歌词、封面等</li>
+</ul>
+</li>
+<li>这些信息如果直接存储到文件系统中可以吗？可以，但是文件系统有很多缺点<ul>
+<li>很难以合适的方式组织数据(多张表之前的关系合理组织)</li>
+<li>并且对数据进行增删改查中的复杂操作(虽然一些简单确实可以), 并且保证操作的原子性</li>
+<li>很难实现数据共享, 比如一个数据库需要为多个程序服务</li>
+<li>需要考虑如何进行数据的高效备份 迁移 恢复</li>
+</ul>
+</li>
+<li>数据库通俗来说就是一个存储数据的仓库, 本质上就是一个软件 一个程序</li>
+</ul>
+<h3 id="常见的数据库有哪些"><a href="#常见的数据库有哪些" class="headerlink" title="常见的数据库有哪些"></a>常见的数据库有哪些</h3><ul>
+<li>通常我们将数据库划分为两类: 关系型数据库和非关系型数据库</li>
+<li>关系型数据库: MySQL、Qracle、DB2、SQL Server、Postgre SQL等<ul>
+<li>关系型数据库通常我们会创建很多个二维数据表</li>
+<li>数据表之间相互关联起来, 形成一对一 一对多 多对多等关系</li>
+<li>之后可以利用SQL语句再多张表中查询我们所需的数据</li>
+<li>支持事务, 对数据的访问更加的安全</li>
+</ul>
+</li>
+<li>非关系型数据库:MongoDB、Redis、Memcached、HBse等<ul>
+<li>非关系型数据库的英文其实是Not Only SQL, 简称为NoSQL</li>
+<li>相对而言非关系型数据库比较简单一些, 存储数据也会更加自由(甚至我们可以直接将一个复杂的json对象直接塞入数据库中)</li>
+<li>NoSQL是基于Key-Value的对应关系, 而且查询的过程中不需要进过SQL解析, 所以性能更高</li>
+</ul>
+</li>
+<li>如何在开发中选择数据库? 具体的选择会根据不同的项目进行综合的分析<ul>
+<li>一般来说, 目前再公司进行后端开发(Node, Java, Go等), 还是以关系型数据库为主</li>
+<li>比较常用的用到非关系型数据的情况是再爬取大量的数据需要进行存储的时候会比较常见</li>
+</ul>
+</li>
+</ul>
+<h3 id="认识MySQL"><a href="#认识MySQL" class="headerlink" title="认识MySQL"></a>认识MySQL</h3><ul>
+<li>MySQL的介绍:<ul>
+<li>MySQL原本是一个开源的数据库, 原开发者为瑞典的MySQL AB公司</li>
+<li>再2008年被Sun公司收购; 再2009年, Sun被Oracle收购</li>
+<li>所以目前MySQL归属于Oracle(甲骨文)</li>
+</ul>
+</li>
+<li>MySQL是一个关系型数据库, 其实本质上就是一款软件, 一个程序<ul>
+<li>这个程序中管理着多个数据库</li>
+<li>每个数据库中可以有多张表</li>
+<li>每个表中可以有多条数据</li>
+</ul>
+</li>
+</ul>
+<h3 id="MySQL的连接操作"><a href="#MySQL的连接操作" class="headerlink" title="MySQL的连接操作"></a>MySQL的连接操作</h3><ul>
+<li>打开终端, 查看MySQL的安装<ul>
+<li>mysql –version</li>
+<li>如果mySQL安装成功后, 会出现mySQL的版本信息</li>
+</ul>
+</li>
+<li>如果我们想要操作数据, 需要先和数据库建立链接, 最直接的方式就是通过终端来连接</li>
+<li>有两种方式来连接<ul>
+<li>两种方式的区别在于输入密码一个是直接输入, 一个是另起一行以密文的形式输入</li>
+<li>方式一: 终端命令行输入 mysql -uroot -p密码</li>
+<li>方式二: 终端命令行输入 mysql -uroot -p 回车, 另起一行输入密码 然后回车</li>
+<li>注意在git bash中如果出现 输入连接命令却没有反应的情况下, 在命令行前添加 winpty即可解决</li>
+</ul>
+</li>
+</ul>
+<h3 id="显示数据库"><a href="#显示数据库" class="headerlink" title="显示数据库"></a>显示数据库</h3><ul>
+<li>一个数据库软件中, 可以包含很多个数据库<ul>
+<li>命令行输入 show databases; 即可查看数据库, 注意分号;也是必须填入的 </li>
+</ul>
+</li>
+<li>此时我们可以看到MySQL默认帮我们创建了几个数据库<ul>
+<li>infomation_schema: 信息数据库, 其中包括MySQL在维护的其他数据库, 表列, 访问权限等信息</li>
+<li>performance_schema: 性能数据库, 记录着MySQL_Server数据库引擎在运行过程中的一些资源消耗相关的信息</li>
+<li>mysql: 用于存储数据库管理者的用户信息 权限信息 以及一些日志信息等</li>
+<li>sys: 相当于是一个简易版的performance_schema, 将性能数据库中的数据汇总成更容易理解的形式</li>
+</ul>
+</li>
+</ul>
+<h3 id="创建数据库-表"><a href="#创建数据库-表" class="headerlink" title="创建数据库-表"></a>创建数据库-表</h3><ul>
+<li>在终端中直接创建一个属于自己的新的数据库(一般情况下一个新的项目会对应一个新的数据库)<ul>
+<li>create database 数据库名;</li>
+</ul>
+</li>
+<li>使用指定的数据库<ul>
+<li>use 数据库名;</li>
+</ul>
+</li>
+<li>在数据库中, 创建一张表<ul>
+<li>create table user(name varchar (20), age int, height double);</li>
+</ul>
+</li>
+<li>在表中插入数据<ul>
+<li>insert into user (name, age, height) values (“xiaoLam”, 18, 1.88);</li>
+</ul>
+</li>
+</ul>
+<h3 id="GUI工具的介绍"><a href="#GUI工具的介绍" class="headerlink" title="GUI工具的介绍"></a>GUI工具的介绍</h3><ul>
+<li>我们会发现在终端操作数据库有很多不方便的地方<ul>
+<li>语句写出来没有高亮, 并且不会有任何提示</li>
+<li>复杂的语句分成多行, 格式看起来不美观, 很容易出现错误</li>
+<li>终端中查看所有的数据库或者表非常的不直观和不方便</li>
+<li>等等</li>
+</ul>
+</li>
+<li>所以在开发中, 我们可以借助于一些GUI工具来帮助我们连接上数据库, 之后直接在GUI工具中操作就很方便了</li>
+<li>常见的MySQL的GUI工具有很多<ul>
+<li>Navicat: 最好用的, 但是收费</li>
+<li>SQLYog: 免费, 但是界面很丑</li>
+<li>TablePlus: 常用的功能都可以使用, 但是会多一些限制(比如只能开两个标签页)</li>
+</ul>
+</li>
+</ul>
+<h3 id="认识SQL语句"><a href="#认识SQL语句" class="headerlink" title="认识SQL语句"></a>认识SQL语句</h3><ul>
+<li>我们希望操作数据库(特别是在程序中操作), 就需要又和数据库沟通的语言, 这个语言就是SQL<ul>
+<li>SQL是Structured Query Language, 称之为结构化查询语言, 简称SQL</li>
+<li>使用SQL编写出来的语句, 就成为SQL语句</li>
+<li>SQL语句可以用于对数据库进行操作</li>
+</ul>
+</li>
+<li>事实上, 常见的关系型数据库SQL语句都是比较相似的, 所以学习了MySQL中的SQL语句, 之后去操作其他关系型数据库也是非常简单的</li>
+<li>SQL语句的常用规范<ul>
+<li>通常关键字是大写的, 比如CREATE, TABLE, SHOW等等</li>
+<li>一条语句结束后, 需要以分号; 结尾, 否则语句不会结束</li>
+<li>如果遇到关键字作为表明或者字段名称, 可以使用反引号 `` 包裹</li>
+</ul>
+</li>
+</ul>
+<h3 id="SQL语句的分类"><a href="#SQL语句的分类" class="headerlink" title="SQL语句的分类"></a>SQL语句的分类</h3><ul>
+<li>常见的SQL语句我们可以分成四类</li>
+<li>DDL(Data Definition Language): 数据定义语言;<ul>
+<li>可以通过DDL语句对数据库或者表进行</li>
+</ul>
+</li>
+<li>DML(Data Manipulation Language): 数据操作语言<ul>
+<li>可以通过DML语句对表进行: 添加, 删除, 修改等操作</li>
+</ul>
+</li>
+<li>DQL(Data Query Language): 数据查询语言<ul>
+<li>可以通过DQL从数据中查询记录;(重点)</li>
+</ul>
+</li>
+<li>DCL(Data Control Language): 数据控制语言<ul>
+<li>对数据库, 表格的权限进行相关访问控制操作</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据库的操作"><a href="#数据库的操作" class="headerlink" title="数据库的操作"></a>数据库的操作</h3><ul>
+<li>查看当前数据库<ul>
+<li>查看所有的数据: SHOW DATABASES;</li>
+<li>使用某一个数据: USE 数据库名称;</li>
+<li>查看当前正在使用的数据库: SELECT DATABASE();</li>
+</ul>
+</li>
+<li>创建新的数据库<ul>
+<li>创建数据库: CREATE DATABASE 数据库名称;</li>
+<li>一般来说我们不会以上面的方式创建数据库, 因为如果已经存在了同名的数据库, 会报错, 甚至程序崩溃</li>
+<li>一般用更加严谨的方式创建: CREATE DATABASE IF NOT EXISTS 数据库名称;</li>
+<li>如果想要创建数据库的同时设置数据库的字符集和排序规则: CREATE DATABASE IF NOT EXISTS 数据库名称 DEFAULT CHARACTER SET 字符集 COLLATE 排序规则;</li>
+<li>注: 排序规则指, 如果在数据库查询的时候, 排序规则规定了查询结果的显示顺序, ai和as指是否区分英文轻重音, ai指不区分; ci和cs指是否区分英文大小写, ci指不区分; 一般使用默认即可</li>
+</ul>
+</li>
+<li>删除数据库<ul>
+<li>删除数据库: DROP DATABASE 数据库名称;</li>
+<li>更加严谨的写法: DROP DATABASE IF EXISTS 数据库名称;</li>
+</ul>
+</li>
+<li>修改数据库(一般只修改数据库的字符集和排序规则)<ul>
+<li>ALTER DATABASE 数据库名称 CHARACTER SET = 字符集 COLLATE = 排序规则;</li>
+</ul>
+</li>
+</ul>
+<h3 id="SQL的数据类型-数字类型"><a href="#SQL的数据类型-数字类型" class="headerlink" title="SQL的数据类型-数字类型"></a>SQL的数据类型-数字类型</h3><ul>
+<li>我们知道不同的数据会划分不同的数据类型, 在数据库中也是一样的<ul>
+<li>MySQL支持的数据类型又: 数字类型, 日期和时间类型, 字符串(字符和字节)类型, 空间类型(存储一个点的坐标, 经度纬度的时候会使用, 一般不会使用)和JSON数据类型(一般不会将一个JSON对象存储在数据库中, 不常用)</li>
+</ul>
+</li>
+<li>数字类型<ul>
+<li>MySQL的数字类型有很多</li>
+<li>整数数字类型: INTEGER, INT(最常用), SMALLINT, TINYINT, MEDLUMINT, BIGINT</li>
+<li>浮点数字类型: FLOAT, DOUBLE(常用), FLOAT是四个字节, 而DOUBLE是八个字节</li>
+<li>精确数字类型: DECIMAL, NUMERIC(DECIMAL是NUMERIC的实现形式), 这两个的使用方法和作用基本一样, 一般常用DECIMAL, 使用方法为传入两个参数, 第一个参数表示数字的长度, 第二个参数为保存的小数个数</li>
+</ul>
+</li>
+</ul>
+<h3 id="SQL的数据类型-日期类型"><a href="#SQL的数据类型-日期类型" class="headerlink" title="SQL的数据类型-日期类型"></a>SQL的数据类型-日期类型</h3><ul>
+<li>MySQL的日期类型也很多</li>
+<li>YEAR以YYY格式显示值<ul>
+<li>范围1901到2155, 和0000</li>
+</ul>
+</li>
+<li>DATE类型用于具有日期部分但是没有时间部分的值<ul>
+<li>DATE以格式YYYY-MM-DD显示值</li>
+<li>支持的范围是’1000-01-01’到’9999-12-31’</li>
+</ul>
+</li>
+<li>DATETIME类型用于包含日期和时间部分的值<ul>
+<li>DATETIME以格式’YYYY-MM-DD hh:mm:ss’显示值</li>
+<li>支持的范围是1000-01-01 00:00:00到9999-12-31 23:59:59</li>
+</ul>
+</li>
+<li>TIMESTAMP数据类型被用于同时包含日期和时间部分的值(一般用这个)<ul>
+<li>TIMESTAMP以格式’YYYY-MM-DD hh:mm:ss’显示值；</li>
+<li>但是它的范围是UTC的时间范围：’1970-01-01 00:00:01’到’2038-01-19 03:14:07’</li>
+<li>与DATETIME的区别只是范围不一样</li>
+</ul>
+</li>
+<li>另外：DATETIME或TIMESTAMP 值可以包括在高达微秒（6位）精度的后小数秒一部分<ul>
+<li>比如DATETIME表示的范围可以是’1000-01-01 00:00:00.000000’到’9999-12-31 23:59:59.999999’</li>
+</ul>
+</li>
+</ul>
+<h3 id="SQL的数据类型-字符串类型"><a href="#SQL的数据类型-字符串类型" class="headerlink" title="SQL的数据类型-字符串类型"></a>SQL的数据类型-字符串类型</h3><ul>
+<li>MySQL的字符串类型表示方式如下</li>
+<li>CHAR类型在创建表时为固定长度, 长度看也是0到255之间的任何值<ul>
+<li>在被查询时, 会删除后面的空格</li>
+</ul>
+</li>
+<li>VARCHAR类型的值是可变长度的字符串, 长度可以指定为0到65535之间的值<ul>
+<li>在被查询时, 不会删除后面的空格</li>
+<li>一般使用VARCHAR这个类型</li>
+</ul>
+</li>
+<li>BINARY和VARBINARY类型用于存储二进制字符串, 存储的时字节字符串;<ul>
+<li>一般来说不会将二进制的数据(比如图片数据)存储在数据库中, 一般时将这种数据存储在文件系统中, 然后根据文件系统的存储位置URL存储在数据库中</li>
+</ul>
+</li>
+<li>BLOB用于存储大的二进制类型</li>
+<li>TEXT用于存储大的字符串类型</li>
+</ul>
+<h3 id="表约束"><a href="#表约束" class="headerlink" title="表约束"></a>表约束</h3><ul>
+<li>主键: PRIMARY KEY<ul>
+<li>一张表中, 为了区分每一条记录的唯一性, 必须有一个字段时永远不会重复, 而且不能为空的, 这个字段我们通常会将其设置为主键</li>
+<li>主键时表中唯一的所以</li>
+<li>而且必须时NOT NULL的, 如果没有设置NOT NULL, 那么MySQL也会隐式地设置为NOT NULL</li>
+<li>主键也可以多列索引, PRIMARY KEY(key…pary, …) 我们一般称之为联合主键</li>
+<li>建议: 在开发中主键字段一个和业务无关, 尽量不要使用业务字段来作为主键</li>
+</ul>
+</li>
+<li>唯一: UNIQUE<ul>
+<li>某些字段在开发中我们希望是唯一地, 不会重复地, 比如手机号码, 身份证号码等, 这些字段我们可以使用UNIQUE来约束</li>
+<li>使用UNIQUE约束地字段在表中必须是不同的</li>
+<li>对于所有引擎, UNIQUE索引允许NULL包含的列具有多个NULL值</li>
+</ul>
+</li>
+<li>不能为控: NOT NULL<ul>
+<li>某些字段我们要求用户必须插入值, 不可以为空, 这个时候我们可以使用NOT NULL来约束</li>
+</ul>
+</li>
+<li>默认值: DEFAULT<ul>
+<li>某些字段我们希望在没有设置时给予一个默认值, 这个时候我们可以使用DEFAULT来完成</li>
+</ul>
+</li>
+<li>自动递增: AUTO_INCREMENT<ul>
+<li>某些字段我们希望不设置值的时候可以进行递增, 比如用户的ID, 这个时候可以使用AUTO_INCREMENT来完成</li>
+</ul>
+</li>
+<li>外键约束也是最常用的一种约束手段</li>
+</ul>
+<h3 id="创建一个完整的表"><a href="#创建一个完整的表" class="headerlink" title="创建一个完整的表"></a>创建一个完整的表</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> `users` &#123;</span><br><span class="line">  id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY AUTO_INCREMENT,</span><br><span class="line">  name <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  age <span class="type">INT</span> <span class="keyword">DEFAULT</span> <span class="number">0</span>,</span><br><span class="line">  telPhone <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">UNIQUE</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  createTime <span class="type">TIMESTAMP</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> users;</span><br><span class="line"><span class="comment">-- 更加严谨的写法</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> users;</span><br></pre></td></tr></table></figure>
+
+<h3 id="表操作"><a href="#表操作" class="headerlink" title="表操作"></a>表操作</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># 修改表名</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> users RENAME <span class="keyword">TO</span> <span class="keyword">user</span>;</span><br><span class="line"></span><br><span class="line"># 添加一个新的列</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> <span class="keyword">ADD</span> updateTime <span class="type">TIMESTAMP</span>;</span><br><span class="line"></span><br><span class="line"># 修改字段的名称</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> CHANEG phoneNum telePhone <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">UNIQUE</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>;</span><br><span class="line"></span><br><span class="line"># 修改字段的类型</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> MODIFY name <span class="type">VARCHAR</span>(<span class="number">30</span>);</span><br><span class="line"></span><br><span class="line"># 删除某一个字段</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> <span class="keyword">DROP</span> age;</span><br><span class="line"></span><br><span class="line"># 补充</span><br><span class="line"># 根据一个表结构去创建另外一个表</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> user1 <span class="keyword">LIKE</span> <span class="keyword">user</span>;</span><br><span class="line"></span><br><span class="line"># 根据一个表中的所有内容去创建另外一个表</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> user2 (<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> <span class="keyword">user</span>);</span><br><span class="line"></span><br><span class="line"># 注意以上两种创建表的方式不会包含主键等的设置</span><br></pre></td></tr></table></figure>
+
+<h3 id="DML-数据操作语句"><a href="#DML-数据操作语句" class="headerlink" title="DML 数据操作语句"></a>DML 数据操作语句</h3><ul>
+<li>DML: Date Manipulation Language (数据操作语句)</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># 插入数据</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">user</span> <span class="keyword">VALUES</span> (按照数据项传入的数据);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">user</span> (需要填入的数据项) <span class="keyword">VALUES</span> (按照顺序插入的顺序);</span><br><span class="line"></span><br><span class="line"># 需求: 在插入日期数据的时候, 数据库可以按照当前时间插入默认值</span><br><span class="line"># <span class="keyword">DEFAULT</span> 指在添加数据的时候会自动设置默认值</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> MODIFY createTime <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span>;</span><br><span class="line"></span><br><span class="line"># <span class="keyword">ON</span> UPDATE 指在数据更新的时候会自动设置当前时间</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> MODIFY updateTime <span class="type">TIMESTAMP</span> <span class="keyword">ON</span> UPDATE <span class="built_in">CURRENT_TIMESTAMP</span>;</span><br><span class="line"></span><br><span class="line"># 如果想要既在添加数据的时候设置默认值, 并且在更新数据的时候也会更新当前时间, 则如下设置</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> MODIFY updateTime <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> UPDATE <span class="built_in">CURRENT_TIMESTAMP</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 删除数据</span><br><span class="line"># 删除所有的数据(一般来说不会这样操作)</span><br><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> <span class="keyword">user</span>;</span><br><span class="line"># 删除符合条件的数据</span><br><span class="line"><span class="keyword">DELETE</span> FORM <span class="keyword">user</span> <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">110</span>;</span><br><span class="line"></span><br><span class="line"># 更新数据</span><br><span class="line"># 更新所有的数据(一般来说不会这样操作)</span><br><span class="line">UPDATE <span class="keyword">user</span> <span class="keyword">SET</span> name <span class="operator">=</span> <span class="string">&#x27;lily&#x27;</span>, telePhone <span class="operator">=</span> <span class="string">&#x27;1011121&#x27;</span>;</span><br><span class="line"># 更新符合条件的数据</span><br><span class="line">UPDATE <span class="keyword">user</span> <span class="keyword">SET</span> name <span class="operator">=</span> <span class="string">&#x27;lily&#x27;</span>, telePhone <span class="operator">=</span> <span class="string">&#x27;1011121&#x27;</span> <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">110</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="DQL查询操作语句"><a href="#DQL查询操作语句" class="headerlink" title="DQL查询操作语句"></a>DQL查询操作语句</h3><ul>
+<li>DQL: Data Query Language(数据查询语言)<ul>
+<li>SELECT用于从一个或者多个表中检索选中的行(Record)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># <span class="number">1.</span>基本的查询操作</span><br><span class="line"># 查询表中所有字段以及所有的数据</span><br><span class="line"># <span class="operator">*</span> 号表示通配符, 选择所有字段</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products;</span><br><span class="line"># 查询特定字段的数据</span><br><span class="line"><span class="keyword">SELECT</span> title, price <span class="keyword">FROM</span> products;</span><br><span class="line"># 对字段结果起别名</span><br><span class="line"># <span class="keyword">AS</span> 后面跟想要起的别名</span><br><span class="line"><span class="keyword">SELECT</span> title <span class="keyword">AS</span> phoneTitle, price <span class="keyword">AS</span> currentPrice <span class="keyword">FROM</span> procucts;</span><br><span class="line"></span><br><span class="line"># <span class="number">2.</span> <span class="keyword">WHERE</span>条件</span><br><span class="line"># <span class="number">2.1</span> 条件判断语句</span><br><span class="line"># 案例: 查询价格小于<span class="number">1000</span>的手机</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="operator">&lt;</span> <span class="number">1000</span>;</span><br><span class="line"># 案例二: 价格等于<span class="number">999</span>的手机</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="operator">=</span> <span class="number">999</span>;</span><br><span class="line"># 案例三: 价格不等于<span class="number">999</span>的手机</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="operator">!=</span> <span class="number">999</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="operator">&lt;&gt;</span> <span class="number">999</span>;</span><br><span class="line"># 案例四: 查询品牌是华为的手机</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> brand <span class="operator">=</span> <span class="string">&#x27;华为&#x27;</span>;</span><br><span class="line"></span><br><span class="line"># <span class="number">2.2</span> 逻辑运算语句</span><br><span class="line"># 案例一: 查询价格<span class="number">1000</span>到<span class="number">2000</span>之间的手机</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="operator">&gt;</span> <span class="number">1000</span> <span class="keyword">AND</span> price <span class="operator">&lt;</span> <span class="number">2000</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="operator">&gt;</span> <span class="number">1000</span> <span class="operator">&amp;&amp;</span> price <span class="operator">&lt;</span> <span class="number">2000</span>;</span><br><span class="line"># 注意使用 <span class="keyword">BETWEEN</span> <span class="keyword">AND</span> 关键字是包含等于的</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="keyword">BETWEEN</span> <span class="number">1000</span> <span class="keyword">AND</span> <span class="number">2000</span>;</span><br><span class="line"></span><br><span class="line"># 案例二: 查询价格在<span class="number">5000</span>以上或者品牌是华为的手机</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="operator">&gt;</span> <span class="number">5000</span> <span class="keyword">OR</span> brand <span class="operator">=</span> <span class="string">&#x27;华为&#x27;</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="operator">&gt;</span> <span class="number">5000</span> <span class="operator">||</span> brand <span class="operator">=</span> <span class="string">&#x27;华为&#x27;</span>;</span><br><span class="line"></span><br><span class="line"># 查询url值为<span class="keyword">NULL</span>的数据</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> url <span class="keyword">IS</span> <span class="keyword">NULL</span>;</span><br><span class="line"># 查询url值不为<span class="keyword">NULL</span>的数据</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> url <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>;</span><br><span class="line"></span><br><span class="line"># <span class="number">2.3</span>. 模糊查询</span><br><span class="line"># <span class="operator">%</span> 百分号表示匹配任意个的任意字符；</span><br><span class="line"># _ 下划线表示匹配一个的任意字符</span><br><span class="line"># 查询title中有M的数据</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> title <span class="keyword">LIKE</span> <span class="string">&#x27;%M%&#x27;</span>;</span><br><span class="line"># 查询title中第二个字符为P的数据</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> title <span class="keyword">LIKE</span> <span class="string">&#x27;_P%&#x27;</span>;</span><br><span class="line"># 查询title中第三个字符为P的数据</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> title <span class="keyword">LIKE</span> <span class="string">&#x27;__P%&#x27;</span>;</span><br><span class="line"></span><br><span class="line"># <span class="number">2.4</span>. <span class="keyword">IN</span>表示取多个值中的其中一个即可</span><br><span class="line"># 查询品牌为华为或者小米或者苹果的手机</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> brand <span class="operator">=</span> <span class="string">&#x27;华为&#x27;</span> <span class="operator">||</span> brand <span class="operator">=</span> <span class="string">&#x27;小米&#x27;</span> <span class="operator">||</span> brand <span class="operator">=</span> <span class="string">&#x27;苹果&#x27;</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> brand <span class="keyword">IN</span> (<span class="string">&#x27;华为&#x27;</span>, <span class="string">&#x27;小米&#x27;</span>, <span class="string">&#x27;苹果&#x27;</span>);</span><br><span class="line"></span><br><span class="line"># <span class="number">3.</span> 对结果进行排序</span><br><span class="line"># 使用 <span class="keyword">ORDER</span> <span class="keyword">BY</span> 关键字, <span class="keyword">ASC</span> 表示升序, <span class="keyword">DESC</span>表示降序</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> brand <span class="keyword">IN</span> (<span class="string">&#x27;华为&#x27;</span>, <span class="string">&#x27;小米&#x27;</span>, <span class="string">&#x27;苹果&#x27;</span>) <span class="keyword">ORDER</span> <span class="keyword">BY</span> price <span class="keyword">ASC</span>, score <span class="keyword">DESC</span>;</span><br><span class="line"></span><br><span class="line"># <span class="number">4.</span> 分页查询</span><br><span class="line"># 使用LIMIT关键字, 表示获取多少条, <span class="keyword">OFFSET</span>关键字, 表示从哪一条开始获取</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products LIMIT <span class="number">20</span> <span class="keyword">OFFSET</span> <span class="number">0</span>;</span><br><span class="line"># 另外一种写法, LIMIT <span class="keyword">offset</span>, limit;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products LIMIT <span class="number">0</span>, <span class="number">20</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h3><ul>
+<li>什么是聚合函数<ul>
+<li>聚合函数指的是, 将一张表作为一组数据, 当我们想对这一组数据进行某些操作(比如求和, 求平均值, 求最大最小值)的时候所使用的方法就是聚合函数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># <span class="number">1.</span>聚合函数的使用</span><br><span class="line"># <span class="number">1.1</span> 求所有手机的价格总和</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">SUM</span>(price) <span class="keyword">FROM</span> products;</span><br><span class="line"># 当然也可以给结果取别名</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">SUM</span>(price) <span class="keyword">AS</span> totalPrice <span class="keyword">FROM</span> products;</span><br><span class="line"># 求符合特定条件的数据的手机价格总和</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">SUM</span>(price) <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> brand <span class="operator">=</span> <span class="string">&#x27;华为&#x27;</span>;</span><br><span class="line"># 求华为手机的平均价格</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">AVG</span>(price) <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> brand <span class="operator">=</span> <span class="string">&#x27;华为&#x27;</span>;</span><br><span class="line"># 求手机的最高和最低价格</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">MAX</span>(price) <span class="keyword">FROM</span> products;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">MIN</span>(price) <span class="keyword">FROM</span> products;</span><br><span class="line"></span><br><span class="line"># 求手机的个数</span><br><span class="line"># <span class="operator">*</span> 号通配符, 表示所有的手机</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> products;</span><br><span class="line"># 求品牌为华为的所有手机的个数</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> brand <span class="operator">=</span> <span class="string">&#x27;华为&#x27;</span>;</span><br><span class="line"># 求具有url的手机个数</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(url) <span class="keyword">FROM</span> products;</span><br><span class="line"></span><br><span class="line"># 求具有price的手机的个数</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(price) <span class="keyword">FROM</span> products;</span><br><span class="line"># 如果想要去重则使用关键字<span class="keyword">DISTINCT</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="keyword">DISTINCT</span> price) <span class="keyword">FROM</span> products;</span><br><span class="line"></span><br><span class="line"># <span class="number">2.</span><span class="keyword">GROUP</span> <span class="keyword">BY</span>的使用</span><br><span class="line"># <span class="keyword">GROUP</span> <span class="keyword">BY</span>的作用是分组</span><br><span class="line"># 将所有手机按照品牌分组</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">GROUP</span> <span class="keyword">BY</span> brand;</span><br><span class="line"># 将所有手机的平均值和数量和平均分按照品牌分组</span><br><span class="line"><span class="keyword">SELECT</span> brand, <span class="built_in">AVG</span>(price), <span class="built_in">COUNT</span>(<span class="operator">*</span>), <span class="built_in">AVG</span>(score) <span class="keyword">FROM</span> products <span class="keyword">GROUP</span> <span class="keyword">BY</span> brand;</span><br><span class="line"># <span class="keyword">HAVING</span>的使用</span><br><span class="line"><span class="keyword">SELECT</span> brand, <span class="built_in">AVG</span>(price) avgPrice, <span class="built_in">COUNT</span>(<span class="operator">*</span>), <span class="built_in">AVG</span>(score) <span class="keyword">FROM</span> products <span class="keyword">GROUP</span> <span class="keyword">BY</span> brand <span class="keyword">HAVING</span> avgPrice <span class="operator">&gt;</span> <span class="number">2000</span>;</span><br><span class="line"></span><br><span class="line"># <span class="number">3.</span>需求: 求评分score <span class="operator">&gt;</span> <span class="number">7.5</span> 的手机的, 平均价格是多少</span><br><span class="line"><span class="keyword">SELECT</span> brand, <span class="built_in">AVG</span>(price) <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> score <span class="operator">&gt;</span> <span class="number">7.5</span> <span class="keyword">GROUP</span> <span class="keyword">BY</span> brand;</span><br></pre></td></tr></table></figure>
+
+<h3 id="多表的设计"><a href="#多表的设计" class="headerlink" title="多表的设计"></a>多表的设计</h3><ul>
+<li>假如我们的上面的商品表中, 对应的品牌还需要包含其他的信息<ul>
+<li>比如品牌的官网, 品牌的世界排名, 品牌的市值等等</li>
+</ul>
+</li>
+<li>如果我们直接在商品中添加一个字段取存储品牌相关的信息, 会存在一些问题<ul>
+<li>一方面, products表中应该表示的都是商品相关的数据, 应该有另外的一张表取表示brand的数据</li>
+<li>另一方面, 多个商品使用的品牌是一致的时候, 会存在大量的冗余数据</li>
+</ul>
+</li>
+<li>所以, 我们可以将所有的批评数据, 单独放到一张表中, 然后通过外键将两张表关联在一起</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"># 给products添加一个brand_id字段</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> products <span class="keyword">ADD</span> brand_id <span class="type">INT</span>;</span><br><span class="line"></span><br><span class="line"># 设置外键限制: 外键限制指的是限制值只能为引用的值</span><br><span class="line"># 修改products的brand_id的字段外键为brand中的id</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> products <span class="keyword">ADD</span> <span class="keyword">FOREIGN</span> KEY(brand_id) <span class="keyword">REFERENCES</span> brand(id);</span><br><span class="line"></span><br><span class="line"># 设置brand_id的值</span><br><span class="line">UPDATE products <span class="keyword">SET</span> brand_id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">WHERE</span> brand <span class="operator">=</span> <span class="string">&#x27;华为&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="外键存在的时候更新和删除数据"><a href="#外键存在的时候更新和删除数据" class="headerlink" title="外键存在的时候更新和删除数据"></a>外键存在的时候更新和删除数据</h3><ul>
+<li>我们来思考一个问题<ul>
+<li>如果products中引用的外键被更新了或者删除了, 此时会出现什么情况呢?</li>
+</ul>
+</li>
+<li>使用SQL语句进行一个更新操作<ul>
+<li>UPDATE brand SET id = 100 WHERE id = 1;</li>
+</ul>
+</li>
+<li>执行代码会报错<ul>
+<li>这是因为外键有默认的action设置为了RESTRICT, 此时就不可以更新和删除关联的外键</li>
+</ul>
+</li>
+</ul>
+<h3 id="如何进行更新呢"><a href="#如何进行更新呢" class="headerlink" title="如何进行更新呢?"></a>如何进行更新呢?</h3><ul>
+<li>如果我们希望可以更新和删除关联的外键, 我们需要修改on delete 或者 on update的值</li>
+<li>我们可以给更新或者删除时设置几个值<ul>
+<li>RESTRIC(默认属性): 当更新或者删除某个关联外键的时候, 会检查该记录是否有关联的外键记录, 有的话就会报错, 不允许更新或者删除</li>
+<li>NO ACTION: 和RESTRIC是一致的, 在SQL标准中定义的</li>
+<li>CASCADE: 当更新或者删除某个记录的时候, 会检查该记录是否有关联的外键记录, 有的话:<ul>
+<li>更新: 会更新对应的记录</li>
+<li>删除: 会将关联的记录一起删除(一般来说删除的时候不会设置为CASCADE值,)</li>
+</ul>
+</li>
+<li>SET NULL: 当更新或者删除某个记录的时候, 会检查该记录是否有关联的外键记录, 有的话, 将对应的值设置为NULL</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># <span class="number">3.</span>修改和删除外键引用的id</span><br><span class="line"># 不可以直接修改和删除被引用的外键</span><br><span class="line">UPDATE brand <span class="keyword">SET</span> id <span class="operator">=</span> <span class="number">100</span> <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> brand <span class="keyword">DROP</span> id;</span><br><span class="line"># 原因是因为关联外键的action被设置为RESTRICT, 此时是不可以修改和删除被引用的外键的</span><br><span class="line"></span><br><span class="line"># <span class="number">4.</span>修改关联外键的action</span><br><span class="line"># 要经过三步才可以修改, 本质是先删除原本的外键, 然后在重新设置外键的时候设置对应的action</span><br><span class="line"># <span class="number">4.1</span> 获取到目前的外键的名称</span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> products;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- CREATE TABLE `products` (</span></span><br><span class="line"><span class="comment">--   `id` int NOT NULL AUTO_INCREMENT,</span></span><br><span class="line"><span class="comment">--   `brand` varchar(20) DEFAULT NULL,</span></span><br><span class="line"><span class="comment">--   `title` varchar(100) NOT NULL,</span></span><br><span class="line"><span class="comment">--   `price` double NOT NULL,</span></span><br><span class="line"><span class="comment">--   `score` decimal(2,1) DEFAULT NULL,</span></span><br><span class="line"><span class="comment">--   `voteCnt` int DEFAULT NULL,</span></span><br><span class="line"><span class="comment">--   `url` varchar(100) DEFAULT NULL,</span></span><br><span class="line"><span class="comment">--   `pid` int DEFAULT NULL,</span></span><br><span class="line"><span class="comment">--   `brand_id` int DEFAULT NULL,</span></span><br><span class="line"><span class="comment">--   PRIMARY KEY (`id`),</span></span><br><span class="line"><span class="comment">--   KEY `brand_id` (`brand_id`),</span></span><br><span class="line"><span class="comment">--   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`id`)</span></span><br><span class="line"><span class="comment">-- ) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci</span></span><br><span class="line"></span><br><span class="line"># <span class="number">4.2</span> 根据获取到的外键的名称删除外键</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> products <span class="keyword">DROP</span> <span class="keyword">FOREIGN</span> KEY products_ibfk_1;</span><br><span class="line"></span><br><span class="line"># <span class="number">4.3</span> 重新添加外键的同时设置对应的action</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> products <span class="keyword">ADD</span> <span class="keyword">FOREIGN</span> KEY (brand_id) <span class="keyword">REFERENCES</span> brand(id) <span class="keyword">ON</span> UPDATE CASCADE <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT;</span><br><span class="line"></span><br><span class="line"># 此时修改关联的外键就可以正常修改了</span><br><span class="line">UPDATE brand <span class="keyword">SET</span> id <span class="operator">=</span> <span class="number">100</span> <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h3><ul>
+<li>什么是多表查询<ul>
+<li>如果我们希望查询到产品的同时, 显示对应的品牌相关的信息, 因为数据是存放在两张表中的, 所以这个时候就需要进行多表查询</li>
+</ul>
+</li>
+<li>如果我们直接通过查询语句希望在多张表中查询到数据, 使用下列SQL语句会产生什么效果呢?<ul>
+<li>SELECT * FROM products, brand;</li>
+</ul>
+</li>
+<li>会发现结果的数量为两张表数据数量的乘积</li>
+<li>这个结果我们称为笛卡尔乘积, 也称为直积, 表示为X*YEAR以YYY格式显示值</li>
+<li>但是事实上很多的数据是没有意义的, 所以我们要对笛卡尔乘积进行筛选<ul>
+<li>使用WHERE进行筛选</li>
+<li>使用SQL语句: SELECT * FROM products, brand WHERE products.brand_id = brand.id;</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># 多表查询的方法</span><br><span class="line"># <span class="number">1.</span> 先获取到笛卡尔乘积</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products, brand;</span><br><span class="line"></span><br><span class="line"># <span class="number">2.</span> 对笛卡尔乘积进行筛选</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products, brand <span class="keyword">WHERE</span> products.brand_id <span class="operator">=</span> brand.id;</span><br><span class="line"></span><br><span class="line"># 以上方法本质上是将所有的结果都查询出来然后进行了筛选, 一般来说我们不会这样取操作的</span><br></pre></td></tr></table></figure>
+
+<h3 id="多表之间的连接"><a href="#多表之间的连接" class="headerlink" title="多表之间的连接"></a>多表之间的连接</h3><ul>
+<li>事实上想要达到上面所说的效果, 并不是像上面的方式操作的, 而是使用SQL JOIN操作</li>
+<li>左连接<ul>
+<li>如果我们希望获取到的是左边所有的数据(以左表为主)<ul>
+<li>这个时候就表示无论左边的表是否有对应的brand_id的值对应右边表的id, 左边的数据都会被查询出来</li>
+<li>这个也是开发中使用最多的情况, 它的完整写法是 LEFT [OUTER] JOIN, 其中的OUTER可以省略</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>右连接<ul>
+<li>如果我们希望获取到的是右边所有的数据(以右表为主)<ul>
+<li>这个时候就表示无论左边的表中的brand_id是否有和右边表中的id对应, 右边的数据都会被查询出来</li>
+<li>右连接在开发中没有左连接常用, 它的完整写法是 RIGHT [OUTER] JOIN,其中的OUTER可以省略</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>内连接<ul>
+<li>事实上内连接表示左边的表和右边的表都有对应的数据关联<ul>
+<li>内连接在开发中偶尔也会常见使用</li>
+<li>内连接有其他的写法: INNER JOIN , CROSS JOIN 或者 JOIN都可以</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>外连接<ul>
+<li>SQL规范中全连接是使用FULL JOIN, 但是MySQL中并没有对它支持, 所以我们是使用UNION来实现全连接的</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># <span class="number">3.</span> 左连接</span><br><span class="line"># <span class="number">3.1</span> 查询所有的手机(包括没有品牌信息的手机)以及对应的品牌</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> brand <span class="keyword">ON</span> products.brand_id <span class="operator">=</span> brand.id;</span><br><span class="line"></span><br><span class="line"># <span class="number">3.2</span> 查询没有对应品牌信息的手机</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> brand <span class="keyword">ON</span> products.brand_id <span class="operator">=</span> brand.id <span class="keyword">WHERE</span> brand.id <span class="keyword">IS</span> <span class="keyword">NULL</span>;</span><br><span class="line"></span><br><span class="line"># <span class="number">4.</span> 右连接</span><br><span class="line"># <span class="number">4.1</span> 查询所有品牌(包括没有手机信息的品牌)以及对应的手机</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">RIGHT</span> <span class="keyword">JOIN</span> brand <span class="keyword">ON</span> products.brand_id <span class="operator">=</span> brand.id;</span><br><span class="line"></span><br><span class="line"># <span class="number">4.2</span> 查询没有对应手机信息的品牌</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">RIGHT</span> <span class="keyword">JOIN</span> brand <span class="keyword">ON</span> products.brand_id <span class="operator">=</span> brand.id <span class="keyword">WHERE</span> products.brand_id <span class="keyword">IS</span> <span class="keyword">NULL</span>;</span><br><span class="line"></span><br><span class="line"># <span class="number">5.</span> 内连接</span><br><span class="line"># <span class="keyword">INNER</span> <span class="keyword">JOIN</span> 和 <span class="keyword">CROSS</span> <span class="keyword">JOIN</span> 都是一样的</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">INNER</span> <span class="keyword">JOIN</span> brand <span class="keyword">ON</span> products.brand_id <span class="operator">=</span> brand.id;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">CROSS</span> <span class="keyword">JOIN</span> brand <span class="keyword">ON</span> products.brand_id <span class="operator">=</span> brand.id;</span><br><span class="line"></span><br><span class="line"># <span class="number">6.</span> 全连接</span><br><span class="line"># mySQL中是不支持 <span class="keyword">FULL</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> 的</span><br><span class="line"># 所以我们需要将左连接和右连接通过 <span class="keyword">UNION</span> 做一个联合</span><br><span class="line">(<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> brand <span class="keyword">ON</span> products.brand_id <span class="operator">=</span> brand.id)</span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line">(<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">RIGHT</span> <span class="keyword">JOIN</span> brand <span class="keyword">ON</span> products.brand_id <span class="operator">=</span> brand.id);</span><br><span class="line"></span><br><span class="line">(<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> brand <span class="keyword">ON</span> products.brand_id <span class="operator">=</span> brand.id <span class="keyword">WHERE</span> brand.id <span class="keyword">IS</span> <span class="keyword">NULL</span>)</span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line">(<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">RIGHT</span> <span class="keyword">JOIN</span> brand <span class="keyword">ON</span> products.brand_id <span class="operator">=</span> brand.id <span class="keyword">WHERE</span> products.brand_id <span class="keyword">IS</span> <span class="keyword">NULL</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="多对多关系数据"><a href="#多对多关系数据" class="headerlink" title="多对多关系数据"></a>多对多关系数据</h3><ul>
+<li>在开发中我们会经常遇到多对多的关系<ul>
+<li>比如学生可以选择多门课程, 一个课程也可以被多个学生选择</li>
+<li>这种情况我们就会使用多对多关系的数据</li>
+</ul>
+</li>
+<li>多对多数据表关键点是有一个关系表来记录两张表中的数据关系</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># 创建两张表并插入数据</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> students (</span><br><span class="line">	id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY AUTO_INCREMENT,</span><br><span class="line">	name <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">	age <span class="type">INT</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> courses (</span><br><span class="line">	id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY AUTO_INCREMENT,</span><br><span class="line">	name <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">	price <span class="keyword">DOUBLE</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"># 插入学生数据以及课程数据</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `students` (name, age) <span class="keyword">VALUES</span>(<span class="string">&#x27;why&#x27;</span>, <span class="number">18</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `students` (name, age) <span class="keyword">VALUES</span>(<span class="string">&#x27;tom&#x27;</span>, <span class="number">22</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `students` (name, age) <span class="keyword">VALUES</span>(<span class="string">&#x27;lilei&#x27;</span>, <span class="number">25</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `students` (name, age) <span class="keyword">VALUES</span>(<span class="string">&#x27;lucy&#x27;</span>, <span class="number">16</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `students` (name, age) <span class="keyword">VALUES</span>(<span class="string">&#x27;lily&#x27;</span>, <span class="number">20</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `courses` (name, price) <span class="keyword">VALUES</span> (<span class="string">&#x27;英语&#x27;</span>, <span class="number">100</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `courses` (name, price) <span class="keyword">VALUES</span> (<span class="string">&#x27;语文&#x27;</span>, <span class="number">666</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `courses` (name, price) <span class="keyword">VALUES</span> (<span class="string">&#x27;数学&#x27;</span>, <span class="number">888</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `courses` (name, price) <span class="keyword">VALUES</span> (<span class="string">&#x27;历史&#x27;</span>, <span class="number">80</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `courses` (name, price) <span class="keyword">VALUES</span> (<span class="string">&#x27;物理&#x27;</span>, <span class="number">888</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `courses` (name, price) <span class="keyword">VALUES</span> (<span class="string">&#x27;地理&#x27;</span>, <span class="number">333</span>);</span><br><span class="line"></span><br><span class="line"># 创建关系表</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> stuendts_select_courses (</span><br><span class="line">	id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY AUTO_INCREMENT,</span><br><span class="line">	students_id <span class="type">INT</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">	courses_id <span class="type">INT</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">	<span class="keyword">FOREIGN</span> KEY (students_id) <span class="keyword">REFERENCES</span> students(id) <span class="keyword">ON</span> UPDATE CASCADE,</span><br><span class="line">	<span class="keyword">FOREIGN</span> KEY (courses_id) <span class="keyword">REFERENCES</span> courses(id) <span class="keyword">ON</span> UPDATE CASCADE</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"># 学生选课</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> students_select_courses (students_id, courses_id) <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> students_select_courses (students_id, courses_id) <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="number">3</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> students_select_courses (students_id, courses_id) <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> students_select_courses (students_id, courses_id) <span class="keyword">VALUES</span> (<span class="number">3</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> students_select_courses (students_id, courses_id) <span class="keyword">VALUES</span> (<span class="number">3</span>,<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> students_select_courses (students_id, courses_id) <span class="keyword">VALUES</span> (<span class="number">5</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> students_select_courses (students_id, courses_id) <span class="keyword">VALUES</span> (<span class="number">5</span>,<span class="number">3</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> students_select_courses (students_id, courses_id) <span class="keyword">VALUES</span> (<span class="number">5</span>,<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"># 查询所有有选课的学生, 以及这些学生选择的课程</span><br><span class="line"><span class="keyword">SELECT</span> stu.id id, stu.name studentName, stu.age studentAge, cs.id coursesId, cs.name coursesName, cs.price coursesPrice  </span><br><span class="line"><span class="keyword">FROM</span> students stu </span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> students_select_courses ssc <span class="keyword">ON</span> ssc.students_id <span class="operator">=</span> stu.id </span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> courses cs <span class="keyword">ON</span> ssc.courses_id <span class="operator">=</span> cs.id; </span><br><span class="line"></span><br><span class="line"># 查询所有学生的选课情况</span><br><span class="line"><span class="keyword">SELECT</span> stu.id id, stu.name studentName, stu.age studengAge, cs.id coursesId, cs.name coursesName, cs.price coursesPrice</span><br><span class="line"><span class="keyword">FROM</span> students stu</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> students_select_courses ssc <span class="keyword">ON</span> ssc.students_id <span class="operator">=</span> stu.id</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> courses cs <span class="keyword">ON</span> ssc.courses_id <span class="operator">=</span> cs.id;</span><br><span class="line"></span><br><span class="line"># 查询哪些学生是没有选课的</span><br><span class="line"><span class="keyword">SELECT</span> stu.id id, stu.name studentName, stu.age studengAge, cs.id coursesId, cs.name coursesName, cs.price coursesPrice</span><br><span class="line"><span class="keyword">FROM</span> students stu</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> students_select_courses ssc <span class="keyword">ON</span> ssc.students_id <span class="operator">=</span> stu.id</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> courses cs <span class="keyword">ON</span> ssc.courses_id <span class="operator">=</span> cs.id</span><br><span class="line"><span class="keyword">WHERE</span> ssc.courses_id <span class="keyword">IS</span> <span class="keyword">NULL</span>;</span><br><span class="line"></span><br><span class="line"># 查询哪些课程是没有被选择的</span><br><span class="line"><span class="keyword">SELECT</span> stu.id id, stu.name studentName, stu.age studengAge, cs.id coursesId, cs.name coursesName, cs.price coursesPrice</span><br><span class="line"><span class="keyword">FROM</span> courses cs</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> students_select_courses ssc <span class="keyword">ON</span> ssc.courses_id <span class="operator">=</span> cs.id</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> students stu <span class="keyword">ON</span> ssc.students_id <span class="operator">=</span> stu.id</span><br><span class="line"><span class="keyword">WHERE</span> ssc.students_id <span class="keyword">IS</span> <span class="keyword">NULL</span>;</span><br><span class="line"></span><br><span class="line"># 查询某一个学生选择了哪些课程</span><br><span class="line"># 比如查询why id为<span class="number">1</span> 学生的选课情况</span><br><span class="line"><span class="keyword">SELECT</span> stu.id id, stu.name studentName, stu.age studengAge, cs.id coursesId, cs.name coursesName, cs.price coursesPrice</span><br><span class="line"><span class="keyword">FROM</span> students stu</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> students_select_courses ssc <span class="keyword">ON</span> ssc.students_id <span class="operator">=</span> stu.id</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> courses cs <span class="keyword">ON</span> ssc.courses_id <span class="operator">=</span> cs.id</span><br><span class="line"><span class="keyword">WHERE</span> stu.id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="将数据转换成对象-一对多"><a href="#将数据转换成对象-一对多" class="headerlink" title="将数据转换成对象(一对多)"></a>将数据转换成对象(一对多)</h3><ul>
+<li>在真实开发中, 我们经常会将数据打包到一个对象中然后传输给客户端</li>
+<li>这个时候我们就要用到JSON_OBJECT();</li>
+</ul>
+<h3 id="将多条数据组织成对象然后放到一个数组中-多对多"><a href="#将多条数据组织成对象然后放到一个数组中-多对多" class="headerlink" title="将多条数据组织成对象然后放到一个数组中(多对多)"></a>将多条数据组织成对象然后放到一个数组中(多对多)</h3><ul>
+<li>在多对多关系中, 我们希望擦好像到的是一个数组</li>
+<li>这个时候我们要用JSON_ARRAYAGG和JSON_OBJECT结合来使用</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># 将联合查询到的数据转换成对象(一对多)</span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">	products.id id, products.title title, products.price price, products.score score, products.url url,</span><br><span class="line">	<span class="built_in">JSON_OBJECT</span>(<span class="string">&#x27;id&#x27;</span>, brand.id, <span class="string">&#x27;name&#x27;</span>, brand.name, <span class="string">&#x27;website&#x27;</span>, brand.website, <span class="string">&#x27;phoneRank&#x27;</span>, brand.phoneRank) brand</span><br><span class="line"><span class="keyword">FROM</span> products</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> brand <span class="keyword">ON</span> products.brand_id <span class="operator">=</span> brand.id;</span><br><span class="line"></span><br><span class="line"># 将查询到的多条数据, 组织成对象, 放到一个数组中(多对多)</span><br><span class="line"># 首先要将查询到的学生数据按照学生id分组</span><br><span class="line"># 通过<span class="built_in">JSON_OBJECT</span>()方法将数据转换为对象</span><br><span class="line"># 然后通过<span class="built_in">JSON_ARRAYAGG</span>()将对象存放到数组中</span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">	stu.id id, stu.name name, stu.age age,</span><br><span class="line">	<span class="built_in">JSON_ARRAYAGG</span>(<span class="built_in">JSON_OBJECT</span>(<span class="string">&#x27;id&#x27;</span>, cs.id, <span class="string">&#x27;name&#x27;</span>, cs.name, <span class="string">&#x27;price&#x27;</span>, cs.price)) courses</span><br><span class="line"><span class="keyword">FROM</span> students stu</span><br><span class="line"><span class="keyword">JOIN</span> students_select_courses ssc <span class="keyword">ON</span> stu.id <span class="operator">=</span> ssc.students_id</span><br><span class="line"><span class="keyword">JOIN</span> courses cs <span class="keyword">ON</span> ssc.courses_id <span class="operator">=</span> cs.id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> stu.id;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">xiaoLam</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/05/26/mySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC/">http://example.com/2021/05/26/mySQL数据库基本/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Lam</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/mySQL/">mySQL</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/26/mySQL2%E5%9F%BA%E7%A1%80/"><img class="prev-cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">mySQL2基础</div></div></a></div><div class="next-post pull-right"><a href="/2021/05/26/10-Node%E4%B8%ADexpress%E5%92%8Ckoa%E6%A1%86%E6%9E%B6%E5%AF%B9%E6%AF%94/"><img class="next-cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">10-Node中express和koa框架对比</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/05/26/mySQL2基础/" title="mySQL2基础"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">mySQL2基础</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">xiaoLam</div><div class="author-info__description">记录常见问题, 分享学习笔记</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xiaoLam"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/xiaoLam" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">博客建设中...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">1.</span> <span class="toc-text">为什么需要数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="toc-number">2.</span> <span class="toc-text">常见的数据库有哪些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86MySQL"><span class="toc-number">3.</span> <span class="toc-text">认识MySQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL%E7%9A%84%E8%BF%9E%E6%8E%A5%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">MySQL的连接操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">5.</span> <span class="toc-text">显示数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93-%E8%A1%A8"><span class="toc-number">6.</span> <span class="toc-text">创建数据库-表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GUI%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-number">7.</span> <span class="toc-text">GUI工具的介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86SQL%E8%AF%AD%E5%8F%A5"><span class="toc-number">8.</span> <span class="toc-text">认识SQL语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">9.</span> <span class="toc-text">SQL语句的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">10.</span> <span class="toc-text">数据库的操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8B"><span class="toc-number">11.</span> <span class="toc-text">SQL的数据类型-数字类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-%E6%97%A5%E6%9C%9F%E7%B1%BB%E5%9E%8B"><span class="toc-number">12.</span> <span class="toc-text">SQL的数据类型-日期类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B"><span class="toc-number">13.</span> <span class="toc-text">SQL的数据类型-字符串类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%BA%A6%E6%9D%9F"><span class="toc-number">14.</span> <span class="toc-text">表约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E8%A1%A8"><span class="toc-number">15.</span> <span class="toc-text">创建一个完整的表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E8%A1%A8"><span class="toc-number">16.</span> <span class="toc-text">删除表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">17.</span> <span class="toc-text">表操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DML-%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5"><span class="toc-number">18.</span> <span class="toc-text">DML 数据操作语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DQL%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5"><span class="toc-number">19.</span> <span class="toc-text">DQL查询操作语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0"><span class="toc-number">20.</span> <span class="toc-text">聚合函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E8%A1%A8%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">21.</span> <span class="toc-text">多表的设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%96%E9%94%AE%E5%AD%98%E5%9C%A8%E7%9A%84%E6%97%B6%E5%80%99%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-number">22.</span> <span class="toc-text">外键存在的时候更新和删除数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%9B%B4%E6%96%B0%E5%91%A2"><span class="toc-number">23.</span> <span class="toc-text">如何进行更新呢?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2"><span class="toc-number">24.</span> <span class="toc-text">多表查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E8%A1%A8%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BF%9E%E6%8E%A5"><span class="toc-number">25.</span> <span class="toc-text">多表之间的连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE"><span class="toc-number">26.</span> <span class="toc-text">多对多关系数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2%E6%88%90%E5%AF%B9%E8%B1%A1-%E4%B8%80%E5%AF%B9%E5%A4%9A"><span class="toc-number">27.</span> <span class="toc-text">将数据转换成对象(一对多)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E5%A4%9A%E6%9D%A1%E6%95%B0%E6%8D%AE%E7%BB%84%E7%BB%87%E6%88%90%E5%AF%B9%E8%B1%A1%E7%84%B6%E5%90%8E%E6%94%BE%E5%88%B0%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E4%B8%AD-%E5%A4%9A%E5%AF%B9%E5%A4%9A"><span class="toc-number">28.</span> <span class="toc-text">将多条数据组织成对象然后放到一个数组中(多对多)</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/%E8%AE%A4%E8%AF%86token%E9%AA%8C%E8%AF%81/" title="认识token验证"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/IZ8Yb2diaRckT3p.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="认识token验证"/></a><div class="content"><a class="title" href="/2021/05/26/%E8%AE%A4%E8%AF%86token%E9%AA%8C%E8%AF%81/" title="认识token验证">认识token验证</a><time datetime="2021-05-26T13:39:13.000Z" title="发表于 2021-05-26 21:39:13">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/cookie%E5%92%8Csession/" title="cookie和session"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/cWZehC6AKD47tnl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="cookie和session"/></a><div class="content"><a class="title" href="/2021/05/26/cookie%E5%92%8Csession/" title="cookie和session">cookie和session</a><time datetime="2021-05-26T13:37:32.000Z" title="发表于 2021-05-26 21:37:32">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/%E8%AE%A4%E8%AF%86ORM/" title="认识ORM"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="认识ORM"/></a><div class="content"><a class="title" href="/2021/05/26/%E8%AE%A4%E8%AF%86ORM/" title="认识ORM">认识ORM</a><time datetime="2021-05-26T13:36:39.000Z" title="发表于 2021-05-26 21:36:39">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/%E8%AE%A4%E8%AF%86Buffer/" title="认识Buffer"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/uts8aj6i3kdg5D7.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="认识Buffer"/></a><div class="content"><a class="title" href="/2021/05/26/%E8%AE%A4%E8%AF%86Buffer/" title="认识Buffer">认识Buffer</a><time datetime="2021-05-26T13:35:51.000Z" title="发表于 2021-05-26 21:35:51">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/NPM%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="NPM包管理工具详解"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NPM包管理工具详解"/></a><div class="content"><a class="title" href="/2021/05/26/NPM%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="NPM包管理工具详解">NPM包管理工具详解</a><time datetime="2021-05-26T13:34:06.000Z" title="发表于 2021-05-26 21:34:06">2021-05-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By xiaoLam</div><div class="footer_custom_text">愿太阳与你同在</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'fNW4GDkW3MwSmHL2oPfOvzdr-gzGzoHsz',
+      appKey: 'vzTELPATATeJTwB3PNLfNNb3',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="//code.tidio.co/mxoehjwwsedfngoj3ixfix9az25z37vc.js" async="async"></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>

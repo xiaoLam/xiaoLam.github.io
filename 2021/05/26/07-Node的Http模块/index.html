@@ -1,0 +1,355 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>07-Node的Http模块 | Lam</title><meta name="keywords" content="Node"><meta name="author" content="xiaoLam"><meta name="copyright" content="xiaoLam"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Web服务器 什么是Web服务器 当应用程序(客户端)需要某一个资源的时候, 可以向一台服务器, 通过http请求获取这个资源; 提供资源的这个服务器, 就是一个Web服务器   目前有很多开源的web服务器: Nginx, Apache(主要传输静态资源), Apache Tomcat(主要传输静态和动态资源), Node.js  Web服务器初体验(创建一个简单的服务器 首先引入http模块,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="07-Node的Http模块">
+<meta property="og:url" content="http://example.com/2021/05/26/07-Node%E7%9A%84Http%E6%A8%A1%E5%9D%97/index.html">
+<meta property="og:site_name" content="Lam">
+<meta property="og:description" content="Web服务器 什么是Web服务器 当应用程序(客户端)需要某一个资源的时候, 可以向一台服务器, 通过http请求获取这个资源; 提供资源的这个服务器, 就是一个Web服务器   目前有很多开源的web服务器: Nginx, Apache(主要传输静态资源), Apache Tomcat(主要传输静态和动态资源), Node.js  Web服务器初体验(创建一个简单的服务器 首先引入http模块,">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png">
+<meta property="article:published_time" content="2021-05-26T13:23:51.000Z">
+<meta property="article:modified_time" content="2021-05-26T13:24:21.962Z">
+<meta property="article:author" content="xiaoLam">
+<meta property="article:tag" content="Node">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png"><link rel="shortcut icon" href="/img/Sun.png"><link rel="canonical" href="http://example.com/2021/05/26/07-Node%E7%9A%84Http%E6%A8%A1%E5%9D%97/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"top-right"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '07-Node的Http模块',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-05-26 21:24:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/myCss.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Lam</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">07-Node的Http模块</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-26T13:23:51.000Z" title="发表于 2021-05-26 21:23:51">2021-05-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-05-26T13:24:21.962Z" title="更新于 2021-05-26 21:24:21">2021-05-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Node/">Node</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="07-Node的Http模块"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="Web服务器"><a href="#Web服务器" class="headerlink" title="Web服务器"></a>Web服务器</h3><ul>
+<li>什么是Web服务器<ul>
+<li>当应用程序(客户端)需要某一个资源的时候, 可以向一台服务器, 通过http请求获取这个资源; 提供资源的这个服务器, 就是一个Web服务器</li>
+</ul>
+</li>
+<li>目前有很多开源的web服务器: Nginx, Apache(主要传输静态资源), Apache Tomcat(主要传输静态和动态资源), Node.js</li>
+</ul>
+<h3 id="Web服务器初体验-创建一个简单的服务器"><a href="#Web服务器初体验-创建一个简单的服务器" class="headerlink" title="Web服务器初体验(创建一个简单的服务器"></a>Web服务器初体验(创建一个简单的服务器</h3><ul>
+<li>首先引入http模块, 然后通过createServer来创建服务器对象<ul>
+<li>http.createServer会返回服务器对象</li>
+<li>底层其实直接使用new Server对象</li>
+</ul>
+</li>
+<li>创建Server对象的时候会传入一个回调函数, 在这个回调函数被调用的时候会传入两个参数<ul>
+<li>第一个参数 req: request请求对象, 包含请求相关信息</li>
+<li>第二个参数 res: response响应对象, 包含服务器要发送给客户端的信息</li>
+</ul>
+</li>
+<li>监听主机和端口号<ul>
+<li>Server通过listen方法来开启服务器, 并且在某一个主机和端口上监听网络请求<ul>
+<li>也就是当我们通过ip: port的方式发送到我们监听的web服务器上时</li>
+<li>我们就可以对其进行相关的处理</li>
+</ul>
+</li>
+<li>listen方法有三个参数<ul>
+<li>第一个参数为端口号port: 可以不传, 系统会默认分配端口, 后续项目中我们会写入到环境变量中</li>
+<li>第二个参数为主机号host: 通用长传入loaclhost, ip地址127.0.0.1, 或者ip地址0.0.0.0, 默认为0.0.0.0<ul>
+<li>localhost: 本质上是一个域名, 通常情况下最终会被解析成127.0.0.1</li>
+<li>127.0.0.1: 回环地址(Loop Back Address), 表达的意思其实是我们主机自己发出去的包, 直接被自己接收<ul>
+<li>正常的数据库经常 应用层 - 传输层 - 网络层 - 数据链路层 - 物理层</li>
+<li>而回环地址, 是在网络层直接被获取到了, 是不会经常数据链路层和物理层的</li>
+<li>比如我们监听127.0.0.1的时候, 在同一个网段下的主机中, 通过ip地址是不能访问的</li>
+</ul>
+</li>
+<li>0.0.0.0:<ul>
+<li>监听IPV4上所有的地址, 再根据端口找到不同的应用程序</li>
+<li>比如我们监听0.0.0.0时, 在同一个网段下的主机中, 通过ip地址是可以访问的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>第三个参数为回调函数: 服务器启动成功时的回调函数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="request对象"><a href="#request对象" class="headerlink" title="request对象"></a>request对象</h3><ul>
+<li>在客户端向服务器端发送请求的时候, 会携带很多信息, 比如:<ul>
+<li>本次请求的URL, 服务器需要根据不同的URL进行不同的处理</li>
+<li>本次请求的请求方式, 比如GET, POST请求传入的参数和处理的方式是不一样的</li>
+<li>本次请求的headers种携带的一些信息, 比如客户端信息, 客户端接收数据的格式, 客户端支持的编码格式等</li>
+<li>等等…</li>
+</ul>
+</li>
+<li>这些信息, Node会帮助我们封装到request对象中, 我们可以直接处理这个request对象</li>
+</ul>
+<h3 id="URL的处理"><a href="#URL的处理" class="headerlink" title="URL的处理"></a>URL的处理</h3><ul>
+<li>客户端在发送请求的时候, 会请求不同的数据, 此时服务器端需要根据不同的请求地址, 作出不同的响应</li>
+</ul>
+<h3 id="URL的解析"><a href="#URL的解析" class="headerlink" title="URL的解析"></a>URL的解析</h3><ul>
+<li>如果客户端在发送请求的时候的url携带了其他的参数</li>
+<li>此时的url会变得很复杂</li>
+<li>此时我们可以使用内置模块url对url进行解析</li>
+<li>然后我们又发现解析出来的url中的query又是一个复杂的数据</li>
+<li>此时我们可以使用内置模块querystring来对query进行解析</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&#x27;http&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 引入url模块</span></span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">&quot;url&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 引入querystring模块</span></span><br><span class="line"><span class="keyword">const</span> qs = <span class="built_in">require</span>(<span class="string">&quot;querystring&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// request对象种的url最基本用法</span></span><br><span class="line">  <span class="comment">// if(req.url === &quot;/login&quot;) &#123;</span></span><br><span class="line">  <span class="comment">//   res.end(&quot;欢迎回来&quot;)</span></span><br><span class="line">  <span class="comment">// &#125; else if (req.url === &quot;/user&quot;) &#123;</span></span><br><span class="line">  <span class="comment">//   res.end(&quot;登陆成功&quot;)</span></span><br><span class="line">  <span class="comment">// &#125; else &#123;</span></span><br><span class="line">  <span class="comment">//   res.end(&quot;请求错误, 请检查&quot;)</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 实际上url是很复杂的</span></span><br><span class="line">  <span class="comment">// 此时我们需要借助一个交url的模块帮助解析从客户端传输到服务器的url</span></span><br><span class="line">  <span class="built_in">console</span>.log(url.parse(req.url));</span><br><span class="line">  <span class="keyword">const</span> &#123; pathname, query &#125; = url.parse(req.url);</span><br><span class="line">  <span class="built_in">console</span>.log(pathname, query);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 此时我们又发现传输过来的query又是很复杂的, 实际上我们可以通过字符串切割的方式来获取到需要的数据</span></span><br><span class="line">  <span class="comment">// 为了方便操作, 我们可以使用querystring模块来对处理query</span></span><br><span class="line">  <span class="built_in">console</span>.log(qs.parse(query));</span><br><span class="line">  <span class="keyword">const</span> &#123; username, password &#125; = qs.parse(query);</span><br><span class="line">  <span class="built_in">console</span>.log(username, password);</span><br><span class="line"></span><br><span class="line">  res.end(<span class="string">&quot;请求成功&quot;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8888</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;服务器启动成功&quot;</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="method的处理"><a href="#method的处理" class="headerlink" title="method的处理"></a>method的处理</h3><ul>
+<li>在Restful规范(设计风格)中, 我们对于数据的增删改查一个通过不同的请求方式<ul>
+<li>GET: 查询数据</li>
+<li>POST: 新建数据</li>
+<li>PATCH: 更新数据</li>
+<li>DELETE: 删除数据</li>
+</ul>
+</li>
+<li>所以, 我们可以通过判断不同的请求方式进行不同的处理<ul>
+<li>比如创建一个用户</li>
+<li>请求接口为/users</li>
+<li>请求方式为POST请求</li>
+<li>携带数据username和password</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&quot;http&quot;</span>)</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">&quot;url&quot;</span>)</span><br><span class="line"><span class="keyword">const</span> qs = <span class="built_in">require</span>(<span class="string">&quot;querystring&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个web服务器</span></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; pathname &#125; = url.parse(req.url)</span><br><span class="line">  <span class="keyword">if</span> (pathname === <span class="string">&quot;/login&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (req.method === <span class="string">&quot;POST&quot;</span>) &#123;</span><br><span class="line">      <span class="comment">// 如果要获取到post请求中的body中的数据</span></span><br><span class="line">      <span class="comment">// 需要使用监听req中的data事件</span></span><br><span class="line">      <span class="comment">// 这是因为post请求中传输过来的数据是使用流的方式传输的</span></span><br><span class="line">      <span class="comment">// 所以注意这里传输过来的data是buffer格式的</span></span><br><span class="line">      <span class="comment">// 可以使用setEncoding方法来设置编码</span></span><br><span class="line">      req.setEncoding(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">      req.on(<span class="string">&quot;data&quot;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(data, <span class="keyword">typeof</span> data); <span class="comment">// 注意这里的data是字符串格式的</span></span><br><span class="line">        <span class="comment">// 为了更好的处理传输过来的data, 使用JSON.parse() 将JSON字符串转换为对象格式</span></span><br><span class="line">        <span class="keyword">const</span> &#123; username, password &#125; = <span class="built_in">JSON</span>.parse(data)</span><br><span class="line">        <span class="built_in">console</span>.log(username, password);</span><br><span class="line">      &#125;)</span><br><span class="line">      res.end(<span class="string">&quot;请求成功&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// res.end(&quot;请求成功&quot;)</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8888</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;服务器启动成功&quot;</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="headers属性"><a href="#headers属性" class="headerlink" title="headers属性"></a>headers属性</h3><ul>
+<li>在requert对象中的header中包含很多有用的信息, 客户端会默认传递过来一些信息</li>
+<li>content-type: 这次请求携带的数据类型<ul>
+<li>application/json 表示是一个json类型</li>
+<li>text/plain 表示是一个文本类型</li>
+<li>application/xml 表示是一个xml类型</li>
+<li>multipart/form-data表示是上传文件</li>
+</ul>
+</li>
+<li>content-length: 文件的大小和长度</li>
+<li>keep-alive:<ul>
+<li>http 是基于TCP协议的, 但是通常在进行一次请求和响应结束后立刻终端</li>
+<li>在http1.0中, 如果想要继续保持链接<ul>
+<li>浏览器需要在请求头中添加 connection: keep-alive</li>
+<li>服务器需要在响应头中添加: connection: keey-alive</li>
+<li>当客户端再次请求后, 就会使用同一个链接, 直到一方中断链接</li>
+</ul>
+</li>
+<li>在http1.1中, 所有链接默认是connection:keep-alive的<ul>
+<li>不同的web服务器会有不同的保持keep-alive的时间</li>
+<li>Node中默认是5s钟</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>accept-encoding: 告知服务器, 客户端支持的文件压缩格式, 比如js文件可以使用gzip编码, 对应.gz文件</li>
+<li>accept: 告知服务器, 客户端可以接收文件的格式类型</li>
+<li>user-agent: 客户端相关信息</li>
+</ul>
+<h3 id="response对象返回响应结果"><a href="#response对象返回响应结果" class="headerlink" title="response对象返回响应结果"></a>response对象返回响应结果</h3><ul>
+<li>如果我们希望给客户端返回响应的结果数据, 可以通过两种方式<ul>
+<li>write方法: 这种方式是直接返回数据, 但是并没有关闭流</li>
+<li>end方法: 这种方式是写出最后的数据, 并且在写出后会关闭流</li>
+</ul>
+</li>
+<li>如果服务器在返回响应数据后没有调用end方法, 客户端会一直等待结果<ul>
+<li>所以客户端在发送网络请求时, 都会设置超时时间</li>
+</ul>
+</li>
+</ul>
+<h3 id="response对象返回状态码"><a href="#response对象返回状态码" class="headerlink" title="response对象返回状态码"></a>response对象返回状态码</h3><ul>
+<li>Http状态码(Http Status Code) 是用于表示Http响应状态的数字代码<ul>
+<li>Http状态码非常多, 可以根据不同的情况, 给客户端返回不同的状态码</li>
+</ul>
+</li>
+<li>设置状态码常见的的方式有两种</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&quot;http&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 设置响应码有两种方式</span></span><br><span class="line">  <span class="comment">// 方式一: 直接设置</span></span><br><span class="line">  <span class="comment">// req.statusCode = 400;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 方式二: 与响应head一起设置</span></span><br><span class="line">  res.writeHead(<span class="number">400</span>)</span><br><span class="line"></span><br><span class="line">  res.end(<span class="string">&quot;hello world&quot;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8888</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;服务器启动成功&quot;</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="response对象响应头文件"><a href="#response对象响应头文件" class="headerlink" title="response对象响应头文件"></a>response对象响应头文件</h3><ul>
+<li>Header设置Content-Type有很重要的作用<ul>
+<li>该属性决定了浏览器根据服务器返回的数据做出什么样的处理方式</li>
+</ul>
+</li>
+<li>常见的设置响应头文件的方式有两种<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&quot;http&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 设置响应的Header</span></span><br><span class="line">  <span class="comment">// 设置方式一: 直接设置</span></span><br><span class="line">  <span class="comment">// res.setHeader(&quot;Content-type&quot;, &quot;text/plain&quot;);</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 设置方式二: 通过writeHead方法设置</span></span><br><span class="line">  res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">    <span class="string">&quot;Content-type&quot;</span>: <span class="string">&quot;text/plain&quot;</span></span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  res.end(<span class="string">&quot;hello world&quot;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8888</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;服务器启动成功&quot;</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="http模块发送网络请求"><a href="#http模块发送网络请求" class="headerlink" title="http模块发送网络请求"></a>http模块发送网络请求</h3><ul>
+<li>在http中也是可以发送网络请求的, 可以用于反向代理</li>
+<li>实际开发中并不会使用原生的http模块来进行网络请求, 而是使用axios库来实现</li>
+<li>axios库可以在浏览器中使用, 也可以在Node中使用<ul>
+<li>在浏览器中使用, axios是基于xhr来实现的</li>
+<li>在Node中, axios是基于http内置模块来实现的</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">xiaoLam</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/05/26/07-Node%E7%9A%84Http%E6%A8%A1%E5%9D%97/">http://example.com/2021/05/26/07-Node的Http模块/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Lam</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Node/">Node</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/26/08-Node%E7%9A%84express%E6%A1%86%E6%9E%B6/"><img class="prev-cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/uts8aj6i3kdg5D7.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">08-Node的express框架</div></div></a></div><div class="next-post pull-right"><a href="/2021/05/26/06-Node%E4%B8%ADStream%E6%B5%81/"><img class="next-cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">06-Node中Stream流</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/05/26/01-认识Node/" title="01-认识Node"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/o1P25LVtMl4TsSF.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">01-认识Node</div></div></a></div><div><a href="/2021/05/26/02-Node参数传递/" title="02-Node参数传递"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/uts8aj6i3kdg5D7.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">02-Node参数传递</div></div></a></div><div><a href="/2021/05/26/03-Node的全局对象/" title="03-Node的全局对象"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/TeOlM2QsULBCkHm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">03-Node的全局对象</div></div></a></div><div><a href="/2021/05/26/04-Node中常见的内置模块/" title="04-Node中常见的内置模块"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">04-Node中常见的内置模块</div></div></a></div><div><a href="/2021/05/26/05-Node中事件循环和异步IO/" title="05-Node中事件循环和异步IO"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">05-Node中事件循环和异步IO</div></div></a></div><div><a href="/2021/05/26/06-Node中Stream流/" title="06-Node中Stream流"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">06-Node中Stream流</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">xiaoLam</div><div class="author-info__description">记录常见问题, 分享学习笔记</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xiaoLam"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/xiaoLam" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">博客建设中...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text">Web服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%9D%E4%BD%93%E9%AA%8C-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">Web服务器初体验(创建一个简单的服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#request%E5%AF%B9%E8%B1%A1"><span class="toc-number">3.</span> <span class="toc-text">request对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#URL%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">URL的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#URL%E7%9A%84%E8%A7%A3%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">URL的解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#method%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">6.</span> <span class="toc-text">method的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#headers%E5%B1%9E%E6%80%A7"><span class="toc-number">7.</span> <span class="toc-text">headers属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#response%E5%AF%B9%E8%B1%A1%E8%BF%94%E5%9B%9E%E5%93%8D%E5%BA%94%E7%BB%93%E6%9E%9C"><span class="toc-number">8.</span> <span class="toc-text">response对象返回响应结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#response%E5%AF%B9%E8%B1%A1%E8%BF%94%E5%9B%9E%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">9.</span> <span class="toc-text">response对象返回状态码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#response%E5%AF%B9%E8%B1%A1%E5%93%8D%E5%BA%94%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="toc-number">10.</span> <span class="toc-text">response对象响应头文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http%E6%A8%A1%E5%9D%97%E5%8F%91%E9%80%81%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82"><span class="toc-number">11.</span> <span class="toc-text">http模块发送网络请求</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/%E8%AE%A4%E8%AF%86token%E9%AA%8C%E8%AF%81/" title="认识token验证"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/IZ8Yb2diaRckT3p.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="认识token验证"/></a><div class="content"><a class="title" href="/2021/05/26/%E8%AE%A4%E8%AF%86token%E9%AA%8C%E8%AF%81/" title="认识token验证">认识token验证</a><time datetime="2021-05-26T13:39:13.000Z" title="发表于 2021-05-26 21:39:13">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/cookie%E5%92%8Csession/" title="cookie和session"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/cWZehC6AKD47tnl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="cookie和session"/></a><div class="content"><a class="title" href="/2021/05/26/cookie%E5%92%8Csession/" title="cookie和session">cookie和session</a><time datetime="2021-05-26T13:37:32.000Z" title="发表于 2021-05-26 21:37:32">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/%E8%AE%A4%E8%AF%86ORM/" title="认识ORM"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="认识ORM"/></a><div class="content"><a class="title" href="/2021/05/26/%E8%AE%A4%E8%AF%86ORM/" title="认识ORM">认识ORM</a><time datetime="2021-05-26T13:36:39.000Z" title="发表于 2021-05-26 21:36:39">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/%E8%AE%A4%E8%AF%86Buffer/" title="认识Buffer"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/uts8aj6i3kdg5D7.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="认识Buffer"/></a><div class="content"><a class="title" href="/2021/05/26/%E8%AE%A4%E8%AF%86Buffer/" title="认识Buffer">认识Buffer</a><time datetime="2021-05-26T13:35:51.000Z" title="发表于 2021-05-26 21:35:51">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/NPM%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="NPM包管理工具详解"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NPM包管理工具详解"/></a><div class="content"><a class="title" href="/2021/05/26/NPM%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="NPM包管理工具详解">NPM包管理工具详解</a><time datetime="2021-05-26T13:34:06.000Z" title="发表于 2021-05-26 21:34:06">2021-05-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By xiaoLam</div><div class="footer_custom_text">愿太阳与你同在</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'fNW4GDkW3MwSmHL2oPfOvzdr-gzGzoHsz',
+      appKey: 'vzTELPATATeJTwB3PNLfNNb3',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="//code.tidio.co/mxoehjwwsedfngoj3ixfix9az25z37vc.js" async="async"></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>

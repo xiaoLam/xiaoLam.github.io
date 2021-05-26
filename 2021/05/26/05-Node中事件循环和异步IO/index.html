@@ -1,0 +1,370 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>05-Node中事件循环和异步IO | Lam</title><meta name="keywords" content="Node"><meta name="author" content="xiaoLam"><meta name="copyright" content="xiaoLam"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="什么是事件循环 事件循环可以理解成我们编写的JavaScript和浏览器或者Node之间的一个桥梁 浏览器的事件循环是一个我们编写的JavaScript代码和浏览器API调用(setTimeout&#x2F;AJAX&#x2F;监听事件等)的一个桥梁, 桥梁之间是通过回调函数来进行沟通的 Node的事件循环时我们编写的JavaScript代码和系统调用(file system, network等)之间的一个桥梁, 桥">
+<meta property="og:type" content="article">
+<meta property="og:title" content="05-Node中事件循环和异步IO">
+<meta property="og:url" content="http://example.com/2021/05/26/05-Node%E4%B8%AD%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E5%92%8C%E5%BC%82%E6%AD%A5IO/index.html">
+<meta property="og:site_name" content="Lam">
+<meta property="og:description" content="什么是事件循环 事件循环可以理解成我们编写的JavaScript和浏览器或者Node之间的一个桥梁 浏览器的事件循环是一个我们编写的JavaScript代码和浏览器API调用(setTimeout&#x2F;AJAX&#x2F;监听事件等)的一个桥梁, 桥梁之间是通过回调函数来进行沟通的 Node的事件循环时我们编写的JavaScript代码和系统调用(file system, network等)之间的一个桥梁, 桥">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png">
+<meta property="article:published_time" content="2021-05-26T13:21:44.000Z">
+<meta property="article:modified_time" content="2021-05-26T13:22:12.502Z">
+<meta property="article:author" content="xiaoLam">
+<meta property="article:tag" content="Node">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png"><link rel="shortcut icon" href="/img/Sun.png"><link rel="canonical" href="http://example.com/2021/05/26/05-Node%E4%B8%AD%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E5%92%8C%E5%BC%82%E6%AD%A5IO/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"top-right"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '05-Node中事件循环和异步IO',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-05-26 21:22:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/myCss.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Lam</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fa fa-bell"></i><span> 日志</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li><li><a class="site-page child" href="/myself/"><i class="fa-fw fa fa-id-card"></i><span> myself</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">05-Node中事件循环和异步IO</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-26T13:21:44.000Z" title="发表于 2021-05-26 21:21:44">2021-05-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-05-26T13:22:12.502Z" title="更新于 2021-05-26 21:22:12">2021-05-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Node/">Node</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="05-Node中事件循环和异步IO"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="什么是事件循环"><a href="#什么是事件循环" class="headerlink" title="什么是事件循环"></a>什么是事件循环</h3><ul>
+<li>事件循环可以理解成我们编写的JavaScript和浏览器或者Node之间的一个桥梁</li>
+<li>浏览器的事件循环是一个我们编写的JavaScript代码和浏览器API调用(setTimeout/AJAX/监听事件等)的一个桥梁, 桥梁之间是通过回调函数来进行沟通的</li>
+<li>Node的事件循环时我们编写的JavaScript代码和系统调用(file system, network等)之间的一个桥梁, 桥梁之间是通过回调函数来进行沟通的</li>
+</ul>
+<h3 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h3><ul>
+<li>进程和线程是操作系统中的两个概念<ul>
+<li>进程(process): 计算机已经运行的程序</li>
+<li>线程(thread): 操作系统能够运行运算调度的最小单位</li>
+</ul>
+</li>
+<li>直观来解释就是<ul>
+<li>进程: 启动一个应用程序, 就会默认启动一个进程(也有可能是多进程, 比如浏览器, 浏览器中的一个页面就是一个进程)\</li>
+<li>线程: 每一个进程中, 都会启动一个线程用来执行程序中的代码, 这个线程被称为主线程</li>
+<li>所以我们可以称进程是线程的容器</li>
+</ul>
+</li>
+<li>用一个形象的例子来解释:<ul>
+<li>操作系统类似于一个工厂</li>
+<li>工厂中有很多个车间, 这些车间就是进程</li>
+<li>每一个车间可能有一个以上的工人在工作, 这些工人就是线程</li>
+</ul>
+</li>
+</ul>
+<h3 id="多进程多线程开发"><a href="#多进程多线程开发" class="headerlink" title="多进程多线程开发"></a>多进程多线程开发</h3><ul>
+<li>操作系统是如何做到同时让多个进程同时工作呢?<ul>
+<li>这是由于CPU的运算速度非常快, 它可以快速地在多个进程之间迅速地切换</li>
+<li>当我们的进程中的线程获取到时间片时, 就可以快速执行代码</li>
+<li>对于用户来说是感觉不到这种快速的切换的</li>
+</ul>
+</li>
+</ul>
+<h3 id="浏览器和JavaScript"><a href="#浏览器和JavaScript" class="headerlink" title="浏览器和JavaScript"></a>浏览器和JavaScript</h3><ul>
+<li>我们经常会说JavaScript是单线程的, 但是JavaScript的线程有自己的容器进程: 也就是浏览器或者Node</li>
+<li>浏览器是一个进程, 而且浏览器中可以有很多的线程<ul>
+<li>多数浏览器都是多进程的, 当打开一个tab页面的时候就会开启一个新的进程, 这是为了防止一个页面卡死的情况下造成所有页面无法响应, 整个浏览器需要强制退出的问题</li>
+<li>浏览器中的每一个进程又有很多的线程, 其中包括执行JavaScript代码的线程</li>
+</ul>
+</li>
+<li>但是JavaScript的代码执行是在一个单独的线程中执行的<ul>
+<li>这就意味着JavaScript的代码, 在同一个时刻只能做一件事情</li>
+<li>如果这件事是非常耗时的, 就意味着当前的线程阻塞</li>
+</ul>
+</li>
+</ul>
+<h3 id="JavaScript代码的执行过程"><a href="#JavaScript代码的执行过程" class="headerlink" title="JavaScript代码的执行过程"></a>JavaScript代码的执行过程</h3><ul>
+<li>实际上浏览器或者Node执行JavaScript的异步代码时, 会将异步代码放到事件队列中, 然后再合适的时机, 将其回调函数放到函数调用栈中执行</li>
+</ul>
+<h3 id="宏任务和微任务"><a href="#宏任务和微任务" class="headerlink" title="宏任务和微任务"></a>宏任务和微任务</h3><ul>
+<li>事件循环中并非只维护着一个队列, 事实上有两个队列<ul>
+<li>宏任务队列 (macrotask queue): ajax, setTimeout, setInterval, DOM监听事件, UI Rendering等</li>
+<li>微任务队列 (microtask queue): Promise的then回调, Mutation Observer API, queueMicrotask()等</li>
+<li>注意async await是Promise的一个语法糖<ul>
+<li>我们可以将await关键字后面执行的代码, 看作是包裹在(resolve, reject) =&gt; (函数执行) 中的代码</li>
+<li>await的下一条语句, 可以看作是then(res =&gt; (函数执行))中的代码</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>事件循环对两个队列的优先级<ul>
+<li><ol>
+<li>main script中的代码优先执行(编写的顶层script代码)</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>在执行任何一个宏任务之前(不是队列, 是一个宏任务), 都会先查看微任务队列中是否有微任务需要执行</li>
+</ol>
+<ul>
+<li>也就是说宏任务执行之前, 必须保证微任务队列是空的</li>
+<li>如果微任务队列不为孔, 那么就优先执行微任务队列中的任务(回调)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Node的架构分析"><a href="#Node的架构分析" class="headerlink" title="Node的架构分析"></a>Node的架构分析</h3><ul>
+<li>浏览器中的EventLoop是根据HTML5定义的规范来实现的, 不同的浏览器可能会有不同的实现, 而Node中是由libuv来实现的</li>
+<li>libuv中主要维护了一个EventLoop和worker threads(线程池)</li>
+<li>EventLoop负责调用系统的一些其他操作: 文件的IO, Network, child-processes等</li>
+<li>libuv是一个多平台的专注于异步IO的库, 它最初是为了Node开发的, 但是现在也被使用在Luvit, Julia, pyuv等其他地方</li>
+</ul>
+<h3 id="阻塞IO和非阻塞IO"><a href="#阻塞IO和非阻塞IO" class="headerlink" title="阻塞IO和非阻塞IO"></a>阻塞IO和非阻塞IO</h3><ul>
+<li>如果我们希望在程序中对一个文件进行操作, 那么我们就需要打开这个文件: 通过文件描述符<ul>
+<li>JavaScript是否可以对一个文件进行操作呢?</li>
+<li>事实上我们任何程序中的文件操作都是需要进行系统调用(操作系统的文件系统)来实现的</li>
+<li>所以对文件的操作, 是一个操作系统的IO操作(input, output)</li>
+</ul>
+</li>
+<li>操作系统为我们提供了阻塞式调用和非阻塞式调用:<ul>
+<li>阻塞式调用: 调用结果返回之前, 当前线程处于阻塞态(阻塞态式CPU是不会分配时间片的), 调用线程只有在得到调用结果后才会继续执行下去</li>
+<li>非阻塞式调用: 调用执行之后, 当前线程式不会停止执行的, 只会过一段时间来检查一下有没有结果返回</li>
+</ul>
+</li>
+<li>所以我们开发中的很多耗时的操作, 都可以基于非阻塞式调用<ul>
+<li>比如网络请求本身使用了Socket通讯, 而Socket本身提供了select模型, 可以进行非阻塞式工作</li>
+<li>比如文件读写的IO操作, 我们可以使用操作系统提供的基于事件的回调机制</li>
+</ul>
+</li>
+</ul>
+<h3 id="非阻塞IO的问题"><a href="#非阻塞IO的问题" class="headerlink" title="非阻塞IO的问题"></a>非阻塞IO的问题</h3><ul>
+<li>非阻塞IO也会存在一定的问题: 在调用结果返回之前, 我们斌没有获取到需要读取的结果<ul>
+<li>那么就意味着为了可以知道是否读取到完整的数据, 我们需要频繁地去确定读取到的数据是否是完整地</li>
+<li>这个过程称为轮询操作</li>
+</ul>
+</li>
+<li>这个轮询工作是由谁来完成的呢?<ul>
+<li>如果我们地主线程频繁地去进行轮询的工作, 那么必然会大大降低性能</li>
+<li>并且开发中我们可能不只是一个文件的读写, 可能是多个文件</li>
+<li>而且可能是多个功能: 网络的IO, 数据库的IO, 子进程的调用</li>
+</ul>
+</li>
+<li>libuv提供了一个线程池(Thread Pool)<ul>
+<li>线程池会负责所有相关的操作, 摈弃会通过轮询等方式等待结果</li>
+<li>当获取到结果的时候, 就可以将对应的回调放到事件循环(某一个事件队列)中</li>
+<li>事件循环就可以负责接管后续的回调工作, 告知JavaScript应用程序执行对应的回调函数</li>
+</ul>
+</li>
+</ul>
+<h3 id="阻塞和非阻塞-同步和异步的区别"><a href="#阻塞和非阻塞-同步和异步的区别" class="headerlink" title="阻塞和非阻塞, 同步和异步的区别"></a>阻塞和非阻塞, 同步和异步的区别</h3><ul>
+<li>阻塞和非阻塞是对于被调用者来说的<ul>
+<li>在我们这里就是系统调用, 操作系统为我们提供了阻塞调用和非阻塞调用</li>
+</ul>
+</li>
+<li>同步和异步是对于调用者说的<ul>
+<li>在我们这里就是自己编写的程序</li>
+<li>如果我们在发起调用之后, 不会进行其他任何操作, 只是等待结果, 这个过程就称为同步调用</li>
+<li>如果我们在发起调用之后, 并不会等待结果, 而是继续完成下面的工作, 等到调用结果出来之后再去执行, 这个过程就称为异步调用</li>
+</ul>
+</li>
+<li>Libuv采用的就是非阻塞异步IO的调用方式</li>
+</ul>
+<h3 id="Node事件循环的阶段"><a href="#Node事件循环的阶段" class="headerlink" title="Node事件循环的阶段"></a>Node事件循环的阶段</h3><ul>
+<li>事件循环就像是一个桥梁, 是链接应用程序的JavaScript和系统调用之间的通道<ul>
+<li>无论是文件IO, 数据库, 网络IO, 定时器, 子进程, 再完成对应的操作之后, 都会将对应的结果和回调函数放到事件循环(任务队列)中</li>
+<li>事件循环会不断地从任务队列中取出对应的事件(回调函数)来执行</li>
+</ul>
+</li>
+<li>但是一次完整的事件循环Tic分成很多个阶段(每一个阶段执行相对应的回调函数)<ul>
+<li>定时器(Timer): 本阶段执行已经被setTimeout() 和 setInterval() 的调度回调函数</li>
+<li>待定回调(Pending Callback): 对某些系统操作(比如TCP错误类型)执行回调, 比如TCP连接时接收到ECONNREFUSED</li>
+<li>idle, prepare: 仅系统内部使用</li>
+<li>轮询(Poll): 检查新的I/O事件; 执行与I/O相关的回调 (在这个阶段会又一个小停留, 这是为了用户的IO操作可以尽可能早的获得结果)</li>
+<li>检测: setImmediate() 回调函数在这里执行</li>
+<li>关闭的回调函数: 一些关闭的回调函数. 比如: socket.on(‘close’, () =&gt; {})</li>
+</ul>
+</li>
+</ul>
+<h3 id="Node的微任务和宏任务"><a href="#Node的微任务和宏任务" class="headerlink" title="Node的微任务和宏任务"></a>Node的微任务和宏任务</h3><ul>
+<li>我们会发现一次事件循环Tick来说, Node的事件循环比浏览器的事件循环更加复杂, 也分为微任务和宏任务<ul>
+<li>宏任务(macrotask): setTimeout, setInterval, IO事件, setImmediate, close事件</li>
+<li>微任务(microtask): Promise的then回调, process.nextTick, queueMicrotask</li>
+</ul>
+</li>
+<li>但是, Node中的事件循环不只是微任务和宏任务<ul>
+<li>微任务队列又分为<ul>
+<li>next tick queue: process.nextTick</li>
+<li>other queue : Promise的then回调, queueMicrotask</li>
+</ul>
+</li>
+<li>宏任务又分为<ul>
+<li>timer queue: setTimeout, setInterval</li>
+<li>poll queue: IO事件</li>
+<li>check queue: setImmediate</li>
+<li>close queue: close事件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">xiaoLam</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/05/26/05-Node%E4%B8%AD%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E5%92%8C%E5%BC%82%E6%AD%A5IO/">http://example.com/2021/05/26/05-Node中事件循环和异步IO/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Lam</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Node/">Node</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/loading.gif" data-original="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/26/06-Node%E4%B8%ADStream%E6%B5%81/"><img class="prev-cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">06-Node中Stream流</div></div></a></div><div class="next-post pull-right"><a href="/2021/05/26/04-Node%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/"><img class="next-cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">04-Node中常见的内置模块</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/05/26/01-认识Node/" title="01-认识Node"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/o1P25LVtMl4TsSF.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">01-认识Node</div></div></a></div><div><a href="/2021/05/26/02-Node参数传递/" title="02-Node参数传递"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/uts8aj6i3kdg5D7.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">02-Node参数传递</div></div></a></div><div><a href="/2021/05/26/03-Node的全局对象/" title="03-Node的全局对象"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/TeOlM2QsULBCkHm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">03-Node的全局对象</div></div></a></div><div><a href="/2021/05/26/04-Node中常见的内置模块/" title="04-Node中常见的内置模块"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">04-Node中常见的内置模块</div></div></a></div><div><a href="/2021/05/26/06-Node中Stream流/" title="06-Node中Stream流"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">06-Node中Stream流</div></div></a></div><div><a href="/2021/05/26/07-Node的Http模块/" title="07-Node的Http模块"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/zMEAHhVxbYdFLqt.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-26</div><div class="title">07-Node的Http模块</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/loading.gif" data-original="/img/sunlogo1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">xiaoLam</div><div class="author-info__description">记录常见问题, 分享学习笔记</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xiaoLam"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/xiaoLam" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">博客建设中...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="toc-number">1.</span> <span class="toc-text">什么是事件循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">进程和线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%BC%80%E5%8F%91"><span class="toc-number">3.</span> <span class="toc-text">多进程多线程开发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E5%92%8CJavaScript"><span class="toc-number">4.</span> <span class="toc-text">浏览器和JavaScript</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript%E4%BB%A3%E7%A0%81%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="toc-number">5.</span> <span class="toc-text">JavaScript代码的执行过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8F%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%BE%AE%E4%BB%BB%E5%8A%A1"><span class="toc-number">6.</span> <span class="toc-text">宏任务和微任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node%E7%9A%84%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90"><span class="toc-number">7.</span> <span class="toc-text">Node的架构分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%BB%E5%A1%9EIO%E5%92%8C%E9%9D%9E%E9%98%BB%E5%A1%9EIO"><span class="toc-number">8.</span> <span class="toc-text">阻塞IO和非阻塞IO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E9%98%BB%E5%A1%9EIO%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">9.</span> <span class="toc-text">非阻塞IO的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%BB%E5%A1%9E%E5%92%8C%E9%9D%9E%E9%98%BB%E5%A1%9E-%E5%90%8C%E6%AD%A5%E5%92%8C%E5%BC%82%E6%AD%A5%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">10.</span> <span class="toc-text">阻塞和非阻塞, 同步和异步的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E7%9A%84%E9%98%B6%E6%AE%B5"><span class="toc-number">11.</span> <span class="toc-text">Node事件循环的阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node%E7%9A%84%E5%BE%AE%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%AE%8F%E4%BB%BB%E5%8A%A1"><span class="toc-number">12.</span> <span class="toc-text">Node的微任务和宏任务</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/%E8%AE%A4%E8%AF%86token%E9%AA%8C%E8%AF%81/" title="认识token验证"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/IZ8Yb2diaRckT3p.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="认识token验证"/></a><div class="content"><a class="title" href="/2021/05/26/%E8%AE%A4%E8%AF%86token%E9%AA%8C%E8%AF%81/" title="认识token验证">认识token验证</a><time datetime="2021-05-26T13:39:13.000Z" title="发表于 2021-05-26 21:39:13">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/cookie%E5%92%8Csession/" title="cookie和session"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/cWZehC6AKD47tnl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="cookie和session"/></a><div class="content"><a class="title" href="/2021/05/26/cookie%E5%92%8Csession/" title="cookie和session">cookie和session</a><time datetime="2021-05-26T13:37:32.000Z" title="发表于 2021-05-26 21:37:32">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/%E8%AE%A4%E8%AF%86ORM/" title="认识ORM"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/OqZ1VjEHG4kSNoW.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="认识ORM"/></a><div class="content"><a class="title" href="/2021/05/26/%E8%AE%A4%E8%AF%86ORM/" title="认识ORM">认识ORM</a><time datetime="2021-05-26T13:36:39.000Z" title="发表于 2021-05-26 21:36:39">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/%E8%AE%A4%E8%AF%86Buffer/" title="认识Buffer"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/uts8aj6i3kdg5D7.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="认识Buffer"/></a><div class="content"><a class="title" href="/2021/05/26/%E8%AE%A4%E8%AF%86Buffer/" title="认识Buffer">认识Buffer</a><time datetime="2021-05-26T13:35:51.000Z" title="发表于 2021-05-26 21:35:51">2021-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/26/NPM%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="NPM包管理工具详解"><img src="/img/loading.gif" data-original="https://i.loli.net/2021/05/19/knaVAz9IfvwGrPc.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NPM包管理工具详解"/></a><div class="content"><a class="title" href="/2021/05/26/NPM%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" title="NPM包管理工具详解">NPM包管理工具详解</a><time datetime="2021-05-26T13:34:06.000Z" title="发表于 2021-05-26 21:34:06">2021-05-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By xiaoLam</div><div class="footer_custom_text">愿太阳与你同在</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'fNW4GDkW3MwSmHL2oPfOvzdr-gzGzoHsz',
+      appKey: 'vzTELPATATeJTwB3PNLfNNb3',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="//code.tidio.co/mxoehjwwsedfngoj3ixfix9az25z37vc.js" async="async"></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>
